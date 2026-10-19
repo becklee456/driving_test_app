@@ -53,7 +53,7 @@ export default function AdminUsers() {
           <Input placeholder={t('common.search')} value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
           <Select value={role} onChange={(e) => { setRole(e.target.value); setPage(1); }}>
             <option value="all">{t('admin.role')}: {t('common.all')}</option>
-            {ROLES.map((r) => (
+            {Object.values(ROLES).map((r) => (
               <option key={r} value={r}>
                 {r}
               </option>
@@ -103,7 +103,7 @@ export default function AdminUsers() {
                         className="w-32"
                         aria-label={t('admin.change_role')}
                       >
-                        {ROLES.map((r) => (
+                        {Object.values(ROLES).map((r) => (
                           <option key={r} value={r}>
                             {r}
                           </option>
