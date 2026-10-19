@@ -1,0 +1,891 @@
+{
+  "generatedAt": "2026-10-16T07:43:03.860Z",
+  "sourceFile": "all_questions_with_answers.txt",
+  "totalQuestions": 404,
+  "validQuestions": 347,
+  "needsReview": 57,
+  "duplicateNumbers": [
+    {
+      "number": 8,
+      "occurrences": 2
+    },
+    {
+      "number": 52,
+      "occurrences": 2
+    },
+    {
+      "number": 96,
+      "occurrences": 2
+    },
+    {
+      "number": 214,
+      "occurrences": 2
+    },
+    {
+      "number": 220,
+      "occurrences": 3
+    },
+    {
+      "number": 227,
+      "occurrences": 2
+    }
+  ],
+  "numbering": {
+    "first": 1,
+    "last": 433,
+    "missingNumbers": [
+      129,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      221,
+      222,
+      226,
+      389
+    ]
+  },
+  "optionCounts": {
+    "3": 11,
+    "4": 393
+  },
+  "correctAnswerCounts": {
+    "0": 51,
+    "1": 352,
+    "4": 1
+  },
+  "categoryCounts": {
+    "driving-behaviour": 25,
+    "road-rules": 36,
+    "road-markings": 11,
+    "traffic-signs": 66,
+    "general-theory": 51,
+    "vehicle-equipment": 28,
+    "pedestrians": 25,
+    "overtaking": 39,
+    "speed": 39,
+    "vehicle-safety": 32,
+    "parking": 36,
+    "emergency-situations": 12,
+    "intersections": 4
+  },
+  "statusCounts": {
+    "active": 347,
+    "review": 57
+  },
+  "flagCounts": {
+    "image-needed": 68,
+    "duplicate-question-number": 13,
+    "duplicate-option-labels": 23,
+    "unexpected-option-sequence": 50,
+    "duplicate-or-out-of-sequence-number": 23,
+    "numbering-gap-before": 7,
+    "no-correct-answer-marked": 51,
+    "missing-option-text": 5,
+    "multiple-correct-answers-marked": 1
+  },
+  "imageNeeded": 68,
+  "issues": [
+    {
+      "order": 8,
+      "questionNumber": 8,
+      "flags": [
+        "duplicate-question-number"
+      ],
+      "question": "Ikinyabiziga kibujijwe guhagarara akanya kanini aha hakurikira :"
+    },
+    {
+      "order": 9,
+      "questionNumber": 9,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Kunyuranaho bikorerwa:"
+    },
+    {
+      "order": 14,
+      "questionNumber": 14,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Iyo nta mategeko awugabanya by’umwihariko umuvuduko ntarengwa w’amapikipiki mu isaha ni:"
+    },
+    {
+      "order": 23,
+      "questionNumber": 23,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Iyo umuvuduko w’ibinyabiziga bidapakiye ushobora kurenga km50 mu isaha ahategamye, bigomba kuba bifi"
+    },
+    {
+      "order": 52,
+      "questionNumber": 52,
+      "flags": [
+        "duplicate-question-number"
+      ],
+      "question": "Ni ryari ikinyabiziga gishobora kugenda mu muhanda moteri itaka cyangwa vitesi idakora:"
+    },
+    {
+      "order": 53,
+      "questionNumber": 52,
+      "flags": [
+        "duplicate-or-out-of-sequence-number",
+        "duplicate-question-number"
+      ],
+      "question": "Umurongo mugari wera udacagaguye ushobora gucibwa ku muhanda kugirango ugaragaze ibi bikurikira:"
+    },
+    {
+      "order": 63,
+      "questionNumber": 62,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Uretse mu mijyi kuyindi mihanda yagenywe na minisiteri ushinzwe gutwara ibintu n’abantu, uburemere n"
+    },
+    {
+      "order": 82,
+      "questionNumber": 96,
+      "flags": [
+        "numbering-gap-before",
+        "duplicate-question-number"
+      ],
+      "question": "Ibiziga by’ibinyabiziga bigendeshwa na moteri n’ibya velomoteri kimwe n’ibya romoruki zabyo bigomba "
+    },
+    {
+      "order": 98,
+      "questionNumber": 96,
+      "flags": [
+        "duplicate-or-out-of-sequence-number",
+        "duplicate-question-number"
+      ],
+      "question": "Usibye ibinyabiziga by’ingabo z’Igihugu, Ikinyabiziga kigendeshwa na moteri kiriho ibyuma ntamenwa c"
+    },
+    {
+      "order": 121,
+      "questionNumber": 119,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Iyo imizigo igizwe n’ibinyampeke, ikawa, amakara, ubwatsi bw’amatungo bidahambiriye, ubugari bwayo b"
+    },
+    {
+      "order": 130,
+      "questionNumber": 128,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Igice cy’umuhanda kiri hakurya y’umurongo mugari wera udacagaguye ugaragaza inkombe mpimbano y’umuha"
+    },
+    {
+      "order": 141,
+      "questionNumber": 171,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence",
+        "numbering-gap-before"
+      ],
+      "question": "Mu migi no ku yindi mihanda y’igihugu igenwa na minisitiri ushinzwe gutwara abantu n’ibintu uburebur"
+    },
+    {
+      "order": 159,
+      "questionNumber": 189,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Nibura ikinyabiziga gitegetswe kugira uduhanagurabirahuri dukurikira:"
+    },
+    {
+      "order": 184,
+      "questionNumber": 214,
+      "flags": [
+        "duplicate-question-number"
+      ],
+      "question": "Niki muribi wakwirinda mugihe ushaka kunyuranaho?"
+    },
+    {
+      "order": 185,
+      "questionNumber": 214,
+      "flags": [
+        "duplicate-or-out-of-sequence-number",
+        "duplicate-question-number"
+      ],
+      "question": "Niki wakora mugihe usanze mu bimenyetso bimurika harimo ibara ry’umuhondo."
+    },
+    {
+      "order": 186,
+      "questionNumber": 215,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Mugihe ukurikiranye na romoruki,n’ukubera iki ugomba gusiga umwanya uhagije hagati yawe nayo?"
+    },
+    {
+      "order": 191,
+      "questionNumber": 220,
+      "flags": [
+        "no-correct-answer-marked",
+        "duplicate-question-number"
+      ],
+      "question": "Niki wakora igihe utabona neza usubira inyuma ?"
+    },
+    {
+      "order": 192,
+      "questionNumber": 220,
+      "flags": [
+        "duplicate-or-out-of-sequence-number",
+        "duplicate-question-number"
+      ],
+      "question": "Igihe ukurikiwe n’ikinyabiziga gitwara abarwayi gicanye amatara y’intabaza arabagirana. Wakora iki ?"
+    },
+    {
+      "order": 193,
+      "questionNumber": 220,
+      "flags": [
+        "no-correct-answer-marked",
+        "duplicate-or-out-of-sequence-number",
+        "duplicate-question-number"
+      ],
+      "question": "Wifuza kugana ibumoso imbere yawe. kubera iki ushaka umwanya mwiza kandi uhagije?"
+    },
+    {
+      "order": 196,
+      "questionNumber": 224,
+      "flags": [
+        "missing-option-text",
+        "duplicate-or-out-of-sequence-number"
+      ],
+      "question": "Uri hafi kunyura k’umuyobozi w’ikinyamitende. Muri ibi byapa bikurikira nikihe wakwitondera?"
+    },
+    {
+      "order": 197,
+      "questionNumber": 227,
+      "flags": [
+        "numbering-gap-before",
+        "duplicate-question-number"
+      ],
+      "question": "Kumanywa urumuri rudahagije hatabona neza .Ni ayahe matara y’urugendo ugomba gukoresha."
+    },
+    {
+      "order": 198,
+      "questionNumber": 227,
+      "flags": [
+        "duplicate-or-out-of-sequence-number",
+        "duplicate-question-number"
+      ],
+      "question": "Niyihe mpamvu ituma tugomba kugabanya umuvuduko mugihe hari ibihu ?"
+    },
+    {
+      "order": 199,
+      "questionNumber": 228,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Niki ugomba gukora igihe uhagaze ku muhanda igihe cy’ibihu?"
+    },
+    {
+      "order": 200,
+      "questionNumber": 229,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence",
+        "image-needed"
+      ],
+      "question": "Iki cyapa cyivuga iki?"
+    },
+    {
+      "order": 206,
+      "questionNumber": 235,
+      "flags": [
+        "missing-option-text"
+      ],
+      "question": "Ibyapa bitegeka bikozwe muyihe shusho?"
+    },
+    {
+      "order": 207,
+      "questionNumber": 236,
+      "flags": [
+        "missing-option-text",
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Nikihe cyapa cyerekena ko nta kinyabiziga gifite moteri cyemerewe kuhanyura?"
+    },
+    {
+      "order": 208,
+      "questionNumber": 237,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence",
+        "image-needed"
+      ],
+      "question": "iki cyapa gisobanura iki ?"
+    },
+    {
+      "order": 220,
+      "questionNumber": 249,
+      "flags": [
+        "missing-option-text",
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Icyapa gitanga uburenganzira bwo gutambuka mbere kigira iyihe shusho?"
+    },
+    {
+      "order": 227,
+      "questionNumber": 256,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Umurongo ucagaguye wera mu muhanda usobanura iki?"
+    },
+    {
+      "order": 236,
+      "questionNumber": 265,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Ugeze ahabereye impanuka yo mumuhanda bwambere ugasanga abakomeretse bikomeye. wakiriza icyarimwe am"
+    },
+    {
+      "order": 237,
+      "questionNumber": 266,
+      "flags": [
+        "missing-option-text"
+      ],
+      "question": "Umuyobozi w’ikinyabizaga cy’ikoreye ibintu bishobora gufata inkongi, n’ikihe cyapa cyerekana ko ibyo"
+    },
+    {
+      "order": 241,
+      "questionNumber": 270,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Icyapa gikoze mw’ishusho ya mpandeshatu kimenyesha:"
+    },
+    {
+      "order": 265,
+      "questionNumber": 294,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Amatara y’urugendo, mu gihe cy’ibihu:"
+    },
+    {
+      "order": 270,
+      "questionNumber": 299,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Igihe umuyobozi w’inyamaswa, afite inyamaswa idatuje, asaba ko ibinyabiziga bihagarara:"
+    },
+    {
+      "order": 271,
+      "questionNumber": 300,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Iyo mu muhanda hashushanyijemo umurongo wera ucagaguye, ntugomba"
+    },
+    {
+      "order": 272,
+      "questionNumber": 301,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Kuvuza ihoni bibujijwe:"
+    },
+    {
+      "order": 295,
+      "questionNumber": 324,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umurongo w’umweru urombereje uciye hagati mu muhanda uvuze iki?"
+    },
+    {
+      "order": 296,
+      "questionNumber": 325,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga ugeze mu isangano ry’umuhanda ugenzurwa ni ibimenyetso by’amatara yaka agas"
+    },
+    {
+      "order": 297,
+      "questionNumber": 326,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Ni iki umuyobozi w’ikinyabiziga yakora ahuye n’ishyo ry’amatungo munzira nyabagendwa?"
+    },
+    {
+      "order": 298,
+      "questionNumber": 327,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga yakora iki igihe ageze ku kazamuko gashinze cyane ?"
+    },
+    {
+      "order": 299,
+      "questionNumber": 328,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga yakora iki ahuye n’ikinyabiziga giturutse mukindi kerekezo, gicanye amatara"
+    },
+    {
+      "order": 300,
+      "questionNumber": 329,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Niki umuyobozi w’ikinyabiziga yakora ageze hafi y’inzira ifunganye igihe ahuye n’ikindi kinyabiziga "
+    },
+    {
+      "order": 301,
+      "questionNumber": 330,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ ikinyabiziga agendera inyuma y’ikindi kinyabizaga akaba adateganya kukinyuraho yakora i"
+    },
+    {
+      "order": 302,
+      "questionNumber": 331,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Niryari amatara ndanga cyerekezo agomba kugaragazwa kubandi bakoresha umuhanda ?"
+    },
+    {
+      "order": 303,
+      "questionNumber": 332,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Gutinda gutanga ibimenyetso ku muyobozi w’ikinyabiziga ni gute bibangamira abandi bakoresha umuhanda"
+    },
+    {
+      "order": 304,
+      "questionNumber": 333,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Ni ubuhe buryo bwiza bwakurikizwa igihe hari umuntu wakomerekeye mu mpanuka yo mu muhanda ?"
+    },
+    {
+      "order": 305,
+      "questionNumber": 334,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Niki umuyobozi w’ikinyabiziga yakora igihe agize uruhare mu mpanuka yo mu muhanda , aho ntawakometes"
+    },
+    {
+      "order": 306,
+      "questionNumber": 335,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Igihe umuyobozi w’ikinyabiziga agendera munzira y’icyerekezo kimwe akifuza gukata ibumoso yakora iki"
+    },
+    {
+      "order": 307,
+      "questionNumber": 336,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabizaga uri kugendera mu muhanda w’ibyerekezo bibiri nuruhe ruhande rw’umuhanda ago"
+    },
+    {
+      "order": 308,
+      "questionNumber": 337,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Igihe umuyobozi w’ikinyabiziga atwaye mu muhanda urombereje w’ibice byinshi agomba kugendera mu kihe"
+    },
+    {
+      "order": 309,
+      "questionNumber": 338,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga yakora iki igihe ageze aho banyura bazenguruka?"
+    },
+    {
+      "order": 310,
+      "questionNumber": 339,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Ni kihe cyerekezo umuyobozi w’ikinyabiziga yinjiriramo iyo ageze aho banyura bazenguruka ?"
+    },
+    {
+      "order": 311,
+      "questionNumber": 340,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Mbere yuko umuyobozi w’ikinyabiziga akata ibumoso mu nzira nyabagendwa, nihe ikinyabiziga kigomba ku"
+    },
+    {
+      "order": 312,
+      "questionNumber": 341,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga yakwitondera iki mbere yuko y’injira munzira banyuramo bazengurutse ?"
+    },
+    {
+      "order": 313,
+      "questionNumber": 342,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga ugendera inyuma y’ikinyabaziga gitwara abagenzi gihagaze gikuramo cyangwa g"
+    },
+    {
+      "order": 314,
+      "questionNumber": 343,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Igihe ubonye icyapa kigaragaza ishuli wakora iki?"
+    },
+    {
+      "order": 315,
+      "questionNumber": 344,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umubare w’abagenzi bemewe gutwarwa mukinyabiziga wanditswe mu :"
+    },
+    {
+      "order": 316,
+      "questionNumber": 345,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Gutwara ikinyabiziga wasinze:"
+    },
+    {
+      "order": 317,
+      "questionNumber": 346,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabizaga ashobora kunyuranaho:"
+    },
+    {
+      "order": 318,
+      "questionNumber": 347,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Ugeze ahari inzira yabanyamaguru barindiriye kwambuka. Ntibatangiye kwambuka , wakora iki?"
+    },
+    {
+      "order": 319,
+      "questionNumber": 348,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Igihe utwaye umuntu mu kinyabiziga cyawe, akibagirwa kwambara umukandara wo kwirinda ibyago ugomba:"
+    },
+    {
+      "order": 320,
+      "questionNumber": 349,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Igihe za otobisi zigenewe gutwara banyeshuli zihagaze kugirango zibafate cyangwa bavemo ugomba :"
+    },
+    {
+      "order": 321,
+      "questionNumber": 350,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Igihe imodoka iparitse ku nkengero z’umuhanda mugihe cy’ ijoro :"
+    },
+    {
+      "order": 322,
+      "questionNumber": 351,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Mu gihe hari undi muyobozi w’ikinyabiziga ugukurikiye watangiye kukunyuraho :"
+    },
+    {
+      "order": 323,
+      "questionNumber": 352,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Utwaye ikinyabiziga mu muhanda ufite ibyerekezo bibiri .ikinyabiziga imbere yawe cyiragenda buhoro, "
+    },
+    {
+      "order": 324,
+      "questionNumber": 353,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Ibice by’umuhanda byera bigari biteganye n’umurongo ugabanya umuhanda mo ,kabiri bisobanura:"
+    },
+    {
+      "order": 325,
+      "questionNumber": 354,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Uturebanyuma dukoreshwa:"
+    },
+    {
+      "order": 326,
+      "questionNumber": 355,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Kuki abanyamaguru batemerewe kwambuka umuhanda mw’ikoni cyangwa hafi y’imodoka ihagaze?"
+    },
+    {
+      "order": 327,
+      "questionNumber": 356,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Kunyuranaho mw’ikoni :"
+    },
+    {
+      "order": 328,
+      "questionNumber": 357,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Umuyobozi w’ikinyabiziga igihe atwaye ikinyabiziga akagira umunaniro utuma yasinzira yakora iki ? a "
+    },
+    {
+      "order": 329,
+      "questionNumber": 358,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Niki umuyobozi w’ikinyabiziga yakora igihe atwaye ikinyabiziga mugihe cy’ibihu,imvura nyinshi, umwuz"
+    },
+    {
+      "order": 330,
+      "questionNumber": 359,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Muri ibi byapa ni ubuhe bwoko bw’ibyapa bitegeka byo mu muhanda?"
+    },
+    {
+      "order": 336,
+      "questionNumber": 365,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Ikinyabiziga kigendeshwa na moteri n’ikinyabiziga gikururwa n’inyamaswa ntibishobora gukurura :"
+    },
+    {
+      "order": 338,
+      "questionNumber": 367,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence",
+        "image-needed"
+      ],
+      "question": "Iki cyapa gisobanura ibi bikurikira:"
+    },
+    {
+      "order": 339,
+      "questionNumber": 368,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Utugarurarumuri turi ku ruhande rw’imbere rw’ikinyabiziga tugomba gusa:"
+    },
+    {
+      "order": 341,
+      "questionNumber": 370,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence",
+        "image-needed"
+      ],
+      "question": "Iki cyapa kigizwe:"
+    },
+    {
+      "order": 343,
+      "questionNumber": 372,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Umuyobozi ubonye ko hari undi umukurikiye ashaka kumunyuraho agomba kubahiriza ibi bikurikira : (a.)"
+    },
+    {
+      "order": 346,
+      "questionNumber": 375,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Icyi cyapa cyerekana :"
+    },
+    {
+      "order": 347,
+      "questionNumber": 376,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence",
+        "image-needed"
+      ],
+      "question": "Iki cyapa kivuga: (a.) ikoni iburyo"
+    },
+    {
+      "order": 350,
+      "questionNumber": 379,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Icyapa cyerekana inzira y’amatungo itegetswe giteye:"
+    },
+    {
+      "order": 353,
+      "questionNumber": 382,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Ibyapa bibuza n’ibitegeka bikurikizwa gusa :"
+    },
+    {
+      "order": 354,
+      "questionNumber": 383,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Ibyapa biburira bibereyeho kumenyesha umugenzi : (a.) ko hari icyago"
+    },
+    {
+      "order": 356,
+      "questionNumber": 385,
+      "flags": [
+        "no-correct-answer-marked",
+        "unexpected-option-sequence"
+      ],
+      "question": "Ishusho y’icyapa kivuga’’ugukikira”bitegetswe ni :"
+    },
+    {
+      "order": 357,
+      "questionNumber": 386,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Icyapa kivuga “icyerekezo gitegetswe”kigizwe n’ikirango cy’ibara :"
+    },
+    {
+      "order": 359,
+      "questionNumber": 388,
+      "flags": [
+        "no-correct-answer-marked"
+      ],
+      "question": "Ibi byapa byo mu muhanda birambuza kunyuranaho ibumoso ?"
+    },
+    {
+      "order": 360,
+      "questionNumber": 390,
+      "flags": [
+        "multiple-correct-answers-marked",
+        "numbering-gap-before"
+      ],
+      "question": "Umuhanda urombereje w’ibice byinshi. Ndashaka kunyura kuri izi kamyo ibyiri mugihe gito ibumoso icya"
+    },
+    {
+      "order": 365,
+      "questionNumber": 395,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence"
+      ],
+      "question": "Mpagaze mu murongo wo guhagarara umwanya muto"
+    },
+    {
+      "order": 380,
+      "questionNumber": 8,
+      "flags": [
+        "duplicate-or-out-of-sequence-number",
+        "image-needed",
+        "duplicate-question-number"
+      ],
+      "question": "Iki cyapa gisobanura iki ?"
+    },
+    {
+      "order": 381,
+      "questionNumber": 410,
+      "flags": [
+        "duplicate-option-labels",
+        "unexpected-option-sequence",
+        "image-needed"
+      ],
+      "question": "Iki cyapa gisobanura iki ?"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "rwanda-driving-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ikigo cy'ikoranabuhanga cyo kwigira no kwitegura ikizamini cy'ubumenyi bwo gutwara mu Rwanda (Rwanda driving theory test preparation platform)",
+  "type": "module",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "parse": "node scripts/parse-questions.mjs",
+    "dev": "concurrently -n server,client -c blue,green \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "npm --workspace server run dev",
+    "dev:client": "npm --workspace client run dev",
+    "build": "npm --workspace client run build",
+    "start": "npm --workspace server run start",
+    "seed": "npm --workspace server run seed",
+    "reset": "npm --workspace server run reset",
+    "test": "npm --workspace server run test && npm --workspace client run test",
+    "test:server": "npm --workspace server run test",
+    "test:client": "npm --workspace client run test",
+    "lint": "npm --workspace server run lint && npm --workspace client run lint"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

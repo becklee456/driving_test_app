@@ -1,0 +1,112 @@
+/**
+ * Canonical category list. Slugs MUST match the parser's CATEGORY_RULES so the
+ * imported question bank links up without post-processing.
+ */
+export const CATEGORIES = [
+  {
+    slug: 'traffic-signs',
+    name: 'Ibimenyetso by’umuhanda',
+    nameEn: 'Traffic signs',
+    icon: 'sign',
+    color: '#2563eb',
+    description: 'Ibimenyetso biburira, bibuzuza n’ibigenga umuhanda.',
+  },
+  {
+    slug: 'road-markings',
+    name: 'Imigendere y’umuhanda',
+    nameEn: 'Road markings',
+    icon: 'road',
+    color: '#0891b2',
+    description: 'Imirongo isize ku muhanda n’icyo isobanura.',
+  },
+  {
+    slug: 'speed',
+    name: 'Umuvuduko',
+    nameEn: 'Speed limits',
+    icon: 'speed',
+    color: '#dc2626',
+    description: 'Umuvuduko wemewe mu mihanda itandukanye.',
+  },
+  {
+    slug: 'overtaking',
+    name: 'Kunyuranaho',
+    nameEn: 'Overtaking',
+    icon: 'overtake',
+    color: '#ea580c',
+    description: 'Amabwiriza yo kunyura ibinyabiziga bindi.',
+  },
+  {
+    slug: 'parking',
+    name: 'Guhagarara no gupaka',
+    nameEn: 'Stopping & parking',
+    icon: 'parking',
+    color: '#7c3aed',
+    description: 'Aho no ukuntu wahagarara cyangwa upaka.',
+  },
+  {
+    slug: 'pedestrians',
+    name: 'Abanyamaguru',
+    nameEn: 'Pedestrians',
+    icon: 'pedestrian',
+    color: '#059669',
+    description: 'Guhagarara ku banyamaguru n’abana.',
+  },
+  {
+    slug: 'intersections',
+    name: 'Intobo n’ihetero',
+    nameEn: 'Intersections',
+    icon: 'intersection',
+    color: '#ca8a04',
+    description: 'Uburyo bwo gukata mu nzira zihura.',
+  },
+  {
+    slug: 'vehicle-safety',
+    name: 'Gukingira ibinyabiziga',
+    nameEn: 'Vehicle safety',
+    icon: 'safety',
+    color: '#0d9488',
+    description: 'Umutekano w’ikinyabiziga n’abagenzi.',
+  },
+  {
+    slug: 'vehicle-equipment',
+    name: 'Ibikoresho by’ikinyabiziga',
+    nameEn: 'Vehicle equipment',
+    icon: 'equipment',
+    color: '#4f46e5',
+    description: 'Amatara, feri, inziga n’ibindi bikoresho.',
+  },
+  {
+    slug: 'driving-behaviour',
+    name: 'Imyitwarire mu gutwara',
+    nameEn: 'Driving behaviour',
+    icon: 'behaviour',
+    color: '#db2777',
+    description: 'Ubugwaneza, ubwitonzi n’imyitwarire myiza.',
+  },
+  {
+    slug: 'emergency-situations',
+    name: 'Uko wakora mu byago',
+    nameEn: 'Emergency situations',
+    icon: 'emergency',
+    color: '#b91c1c',
+    description: 'Ibyakorwa mu mpanuka cyangwa mu kaga.',
+  },
+  {
+    slug: 'road-rules',
+    name: 'Amabwiriza y’umuhanda',
+    nameEn: 'Road rules',
+    icon: 'rules',
+    color: '#334155',
+    description: 'Amategeko rusange y’umuhanda n’inyandiko.',
+  },
+  {
+    slug: 'general-theory',
+    name: 'Igegenzura rusange',
+    nameEn: 'General theory',
+    icon: 'book',
+    color: '#64748b',
+    description: 'Ibibazo rusange ku bumenyi bwo gutwara.',
+  },
+];
+
+export default CATEGORIES;

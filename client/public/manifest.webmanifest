@@ -1,0 +1,22 @@
+{
+  "name": "Ikizamini cyo Gutwara",
+  "short_name": "Ikizamini",
+  "description": "Witegure ikizamini cyo gutwara mu Rwanda.",
+  "lang": "rw",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#2063a7",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
