@@ -9,6 +9,9 @@ node_modules/
 .env.*.local
 server/.env
 
+# Vercel
+.vercel/
+
 # Build output
 dist/
 build/

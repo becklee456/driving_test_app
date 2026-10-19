@@ -4,9 +4,15 @@ import logger from './config/logger.js';
 import { connectDatabase, disconnectDatabase } from './config/db.js';
 import { createApp } from './app.js';
 
-async function start() {
-  await connectDatabase();
-  const app = createApp();
+// On Vercel the entry module must export the Express app as its default
+// export; Vercel invokes it as a single function. Locally we listen on a port.
+await connectDatabase();
+
+const app = createApp();
+
+export default app;
+
+if (!process.env.VERCEL) {
   const server = http.createServer(app);
 
   server.listen(config.port, () => {
@@ -32,13 +38,4 @@ async function start() {
   process.on('uncaughtException', (err) => {
     logger.error('Uncaught exception', { message: err.message, stack: err.stack });
   });
-
-  return server;
 }
-
-start().catch((err) => {
-  logger.error('Kwinjira muri seriveri byanze', { message: err.message });
-  process.exit(1);
-});
-
-export default start;
