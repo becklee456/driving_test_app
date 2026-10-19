@@ -33,7 +33,7 @@ export async function issueVerificationOtp(user) {
   return otp;
 }
 
-export async function register({ fullName, email, password, phone }, _req = {}) {
+export async function register({ fullName, email, password, phone }, req = {}) {
   const settings = await Settings.getSettings();
   if (!settings.allowRegistration) {
     throw ApiError.forbidden('Kwiyandikisha kwafunzwe by’agateganyo', 'REGISTRATION_DISABLED');
@@ -46,23 +46,19 @@ export async function register({ fullName, email, password, phone }, _req = {}) 
   const user = new User({ fullName, email: normalizedEmail, phone: phone || null });
   await user.setPassword(password);
   user.status = 'active';
+  // Email verification is not enforced yet; new accounts are usable immediately.
+  user.emailVerified = true;
   await user.save();
-
-  const otp = await issueVerificationOtp(user);
 
   await notify(user, {
     type: 'system',
     title: 'Murakaza neza!',
-    body: 'Konti yawe yafunguwe. Emeza email yawe kugirango utangire kwiga.',
+    body: 'Konti yawe yafunguwe. Tangira kwiga.',
   });
 
-  if (config.isDevelopment) logger.info(`[auth] verification OTP for ${user.email}: ${otp}`);
+  const session = await issueSession(user, { ip: req.ip, userAgent: req.headers?.['user-agent'] });
 
-  return {
-    user,
-    verificationRequired: settings.requireEmailVerification,
-    devOtp: config.isDevelopment ? otp : undefined,
-  };
+  return { user, session };
 }
 
 export async function verifyEmail({ email, otp }) {

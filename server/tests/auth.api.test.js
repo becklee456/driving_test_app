@@ -19,14 +19,15 @@ describe('auth API', () => {
     expect(res.body.success).toBe(false);
   });
 
-  it('registers a user and hides secrets', async () => {
+  it('registers a user and signs them in', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send({ fullName: 'Uwimana Jean', email: 'new@test.rw', password });
     expect(res.status).toBe(201);
     expect(res.body.data.user.email).toBe('new@test.rw');
     expect(res.body.data.user.passwordHash).toBeUndefined();
-    expect(res.body.data.verificationRequired).toBe(true);
+    expect(res.body.data.accessToken).toBeTruthy();
+    expect(res.headers['set-cookie'].join(';')).toContain('idt_access');
   });
 
   it('rejects a duplicate email', async () => {

@@ -11,14 +11,11 @@ const INITIAL = { fullName: '', email: '', phone: '', password: '', confirmPassw
 
 export default function Register() {
   const { t } = useTranslation();
-  const { register, verifyEmail } = useAuth();
+  const { register } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
 
   const [form, setForm] = useState(INITIAL);
-  const [step, setStep] = useState('form');
-  const [otp, setOtp] = useState('');
-  const [devOtp, setDevOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -45,29 +42,13 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      const data = await register({
+      await register({
         fullName: form.fullName.trim(),
         email: form.email.trim(),
         password: form.password,
         phone: form.phone.trim() || undefined,
       });
-      if (data?.devOtp) setDevOtp(data.devOtp);
-      setStep('verify');
       toast.success(t('auth.register_success'));
-    } catch (err) {
-      setError(formatApiError(err, t));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onVerify = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      await verifyEmail({ email: form.email, otp });
-      toast.success(t('auth.login_success'));
       navigate('/app', { replace: true });
     } catch (err) {
       setError(formatApiError(err, t));
@@ -75,25 +56,6 @@ export default function Register() {
       setLoading(false);
     }
   };
-
-  if (step === 'verify') {
-    return (
-      <Card className="p-6 sm:p-8">
-        <form onSubmit={onVerify} className="space-y-4">
-          <div className="text-center">
-            <h1 className="text-xl font-bold text-slate-900">{t('auth.verify_email')}</h1>
-            <p className="mt-1 text-sm text-slate-500">{t('auth.verify_subtitle')}</p>
-          </div>
-          {devOtp ? <Alert variant="info">OTP: <strong>{devOtp}</strong></Alert> : null}
-          {error ? <Alert variant="danger">{error}</Alert> : null}
-          <Input id="otp" label={t('auth.otp')} value={otp} onChange={(e) => setOtp(e.target.value)} inputMode="numeric" autoFocus required />
-          <Button type="submit" loading={loading} className="w-full">
-            {t('common.confirm')}
-          </Button>
-        </form>
-      </Card>
-    );
-  }
 
   return (
     <Card className="p-6 sm:p-8">

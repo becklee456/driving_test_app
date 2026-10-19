@@ -14,11 +14,8 @@ function sessionPayload(result) {
 export async function register(req, res) {
   const result = await authService.register(req.body, req);
   await recordActivity(req, { action: 'auth.register', resource: 'user', resourceId: result.user._id, meta: { email: result.user.email } });
-  return success(
-    res,
-    { user: result.user, verificationRequired: result.verificationRequired, devOtp: result.devOtp },
-    201,
-  );
+  setAuthCookies(res, result.session);
+  return success(res, sessionPayload(result), 201);
 }
 
 export async function verifyEmail(req, res) {

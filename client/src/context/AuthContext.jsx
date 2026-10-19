@@ -90,7 +90,14 @@ export function AuthProvider({ children }) {
     [applySession],
   );
 
-  const register = useCallback((payload) => request({ method: 'post', url: '/auth/register', data: payload }), []);
+  const register = useCallback(
+    async (payload) => {
+      const data = await request({ method: 'post', url: '/auth/register', data: payload });
+      applySession(data);
+      return data;
+    },
+    [applySession],
+  );
 
   const verifyEmail = useCallback(
     async (payload) => {
