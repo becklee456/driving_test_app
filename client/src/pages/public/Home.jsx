@@ -8,9 +8,9 @@ import { HeroScene, SignCluster, SteeringWheel } from '../../components/illustra
 
 const FEATURES = [
   { icon: 'book', title: 'Ibibazo nyakuri', body: 'Ibibazo biva mu kizamini nyakuri cyo gutwara mu Rwanda.', tone: 'brand' },
-  { icon: 'target', title: 'Imyitozo ihuye nawe', body: 'Toza ku byiciro, ukore ikizamini cy’igerageza, ukurikirane aho ugeze.', tone: 'amber' },
+  { icon: 'target', title: 'Imyitozo ihuye nibyo ukeneye', body: 'Toza ku byiciro, ukore ikizamini cy’igerageza, ukurikirane aho ugeze.', tone: 'amber' },
   { icon: 'chart', title: 'Kumenya aho ugeze', body: 'Reba amanota, intege nke n’intege nke mu buryo bworoshye.', tone: 'emerald' },
-  { icon: 'shield', title: 'Byizewe kandi bishya', body: 'Ibibazo bigenzurwa kandi bigahorana amakuru mashya.', tone: 'rose' },
+  { icon: 'shield', title: 'Ibibazo Byizewe kandi bishya', body: 'Ibibazo bigenzurwa kandi bivuguruye.', tone: 'rose' },
 ];
 
 const TONES = {

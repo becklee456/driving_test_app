@@ -118,10 +118,10 @@ export default function Login() {
               <Icon name={showPassword ? 'eyeOff' : 'eye'} className="h-4 w-4" />
             </button>
           </div>
-          <div className="flex justify-end">
-            <Link to="/forgot-password" className="text-sm font-medium text-brand-700 hover:underline">
-              {t('auth.forgot_password')}
-            </Link>
+          <div className="flex justify-start py-3">
+            <p className="text-sm font-medium text-gray-400 hover:underline">
+                imyirondoro yawe ningenzi nukayi hanehane
+            </p>
           </div>
           <Button type="submit" loading={loading} className="w-full">
             {t('nav.login')}
