@@ -36,7 +36,11 @@
     "admin": "Admin",
     "logout": "Log out",
     "login": "Log in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "menu": "Menu",
+    "plans": "Plans"
   },
   "maintenance": {
     "title": "Maintenance mode",
@@ -519,6 +523,189 @@
     "confirm_body": "We received your payment. It will be reviewed shortly.",
     "go_billing": "View billing status",
     "plan_not_found": "This plan is not available."
+  },
+  "policy": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "updated": "Last updated: 20 October 2026",
+      "intro": "Ikizamini cyo Gutwara (the \"App\") is a Rwanda driving-test preparation service. This policy explains what information we collect, why we collect it, and how we protect it. By creating an account or using the App you agree to these practices.",
+      "sections": [
+        {
+          "title": "1. Information we collect",
+          "body": [
+            "Account data: your full name, email address, password (stored only as a secure hash), role, and notification preferences.",
+            "Payment data: the phone number you paid from, payer name, Mobile Money transaction reference, the message you sent to your provider, and the payment screenshot you upload for verification.",
+            "Learning data: your quiz attempts, answers, scores, XP and streaks, bookmarks, mistakes, plan and subscription records, and reports you submit about questions.",
+            "Technical data: IP address, login and session records, and security events such as failed logins and rate limits. These are used to protect the service.",
+            "Usage statistics: anonymised page-view statistics collected by Vercel Web Analytics. They contain no personal identifier and are not used to recognise you."
+          ]
+        },
+        {
+          "title": "2. How we use your information",
+          "body": [
+            "To run the service: build and grade your quiz sessions and show your progress, streaks and rankings.",
+            "To verify payments: authorised administrators review your screenshot and activate your plan. Each transaction is recorded immutably (amounts, dates, decisions) for accounting and dispute handling.",
+            "To keep the service safe: rate limiting, login attempt limits, and audit logs of administrative actions.",
+            "To contact you: transactional email such as password resets and security notices, and in-app notifications you have enabled.",
+            "To improve the App: aggregated statistics that never identify individual users."
+          ]
+        },
+        {
+          "title": "3. Payment proofs and Mobile Money",
+          "body": [
+            "Screenshots are stored in protected storage and are visible only to administrators who review payments.",
+            "We check that the sender phone, amount and transaction reference match the account shown at checkout. We never ask for your Mobile Money PIN, and payments go directly to the recipient shown in the App — we never hold your money."
+          ]
+        },
+        {
+          "title": "4. Cookies and local storage",
+          "body": [
+            "We use strictly necessary cookies and browser storage to keep you signed in and to protect forms from forgery. You can clear them at any time — you will simply be signed out.",
+            "Vercel Web Analytics does not use cookies and does not store a personal identifier."
+          ]
+        },
+        {
+          "title": "5. Who we share information with",
+          "body": [
+            [
+              "Administrators of the App who review payments and support users.",
+              "Our hosting, database and email providers, which process data only on our instructions and under confidentiality obligations.",
+              "Authorities, when disclosure is required by Rwandan law or needed to protect users and the App.",
+              "We do not sell or rent your personal data to anyone."
+            ]
+          ]
+        },
+        {
+          "title": "6. How long we keep it",
+          "body": [
+            "While your account is active, and afterwards only as long as needed for legitimate purposes such as payment records, security logs and legal obligations.",
+            "You can request deletion of your account and we will erase or anonymise your personal data, except records we are required by law to keep (for example completed payment transactions)."
+          ]
+        },
+        {
+          "title": "7. Security",
+          "body": [
+            "Passwords are stored hashed with bcrypt, traffic is encrypted with HTTPS, and access to personal data is limited to staff who need it to do their job.",
+            "No system is completely secure. Keep your password private and contact us if you notice any suspicious activity on your account."
+          ]
+        },
+        {
+          "title": "8. Your rights",
+          "body": [
+            "You can access, correct or delete the data we hold about you from your profile, and export your learning history.",
+            "You can also object to or restrict certain processing, or withdraw consent by deleting your account. Write to us and we will act on verified requests."
+          ]
+        },
+        {
+          "title": "9. Children",
+          "body": [
+            "The App is not directed at children under 13. If you believe a child has provided us with personal data, contact us and we will delete it."
+          ]
+        },
+        {
+          "title": "10. Changes to this policy",
+          "body": [
+            "We may update this policy from time to time. The date at the top changes whenever we do, and continued use of the App means you accept the updated policy."
+          ]
+        },
+        {
+          "title": "11. Contact",
+          "body": [
+            "If you have questions about this policy or your data, contact the team at support@ikizamini.rw."
+          ]
+        }
+      ],
+      "contact": "Privacy questions? Email support@ikizamini.rw and we will respond to verified requests."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "updated": "Last updated: 20 October 2026",
+      "intro": "These Terms govern your use of Ikizamini cyo Gutwara (the \"App\"). By creating an account or using the App you accept them. If you do not agree, do not use the App.",
+      "sections": [
+        {
+          "title": "1. The service",
+          "body": [
+            "The App provides Rwanda driving-theory practice questions, mock exams, progress tracking and optional paid plans. Features and limits (such as free question quotas) are shown in the App and may change over time."
+          ]
+        },
+        {
+          "title": "2. Accounts",
+          "body": [
+            "You must give accurate information and be at least 18 years old to pay for a plan. You are responsible for everything done through your account, so keep your password secret and do not share your account with anyone."
+          ]
+        },
+        {
+          "title": "3. Free and paid plans",
+          "body": [
+            "Free access has daily limits shown in the App. Paid plans grant the entitlements listed on the pricing page (for example a number of mock exams per day) for the plan duration shown before you buy.",
+            "Prices are in Rwandan francs (RWF) and are always charged at the price the server shows at checkout. \"Lifetime\" plans last for as long as the App operates."
+          ]
+        },
+        {
+          "title": "4. Payments and verification",
+          "body": [
+            "Payment is manual: you send Mobile Money to the recipient shown at checkout and upload a screenshot as proof. An administrator verifies it within the verification window; pending requests expire after that window.",
+            "Your plan starts when the payment is approved. Your plan and transaction history are captured at approval time and are not changed by later price updates."
+          ]
+        },
+        {
+          "title": "5. Refunds",
+          "body": [
+            "Except where required by law, a plan is non-refundable once it is active. If a payment was approved but your plan was not activated, or something was mis-sold, contact support@ikizamini.rw and we will make it right."
+          ]
+        },
+        {
+          "title": "6. Acceptable use",
+          "body": [
+            "You must not:",
+            [
+              "use bots, scrapers or automated tools to extract questions or bypass quotas;",
+              "cheat in exams, tamper with results, or interfere with other users;",
+              "attempt to gain unauthorised access to the App, its data or its accounts;",
+              "upload false payment proofs or claim payments you did not make;",
+              "reproduce, resell or redistribute the question bank outside your own learning;"
+            ]
+          ]
+        },
+        {
+          "title": "7. Learning content disclaimer",
+          "body": [
+            "Our questions and mock exams are study material prepared for the Rwandan theory test. They are not the official exam, we are not affiliated with the roads authority, and practising here does not guarantee you will pass the official driving test."
+          ]
+        },
+        {
+          "title": "8. Intellectual property",
+          "body": [
+            "The App, its design, branding and question bank belong to us or our licensors. You get a personal, non-transferable licence to study with them. Feedback you submit, such as question reports, may be used to improve the App."
+          ]
+        },
+        {
+          "title": "9. Suspension and termination",
+          "body": [
+            "We may suspend or close accounts that break these Terms, provide false payment information, or abuse the service. You can delete your account at any time from your profile."
+          ]
+        },
+        {
+          "title": "10. Disclaimers and liability",
+          "body": [
+            "The App is provided \"as is\" without warranties of any kind. To the extent permitted by law, we are not liable for indirect or consequential losses, and our total liability is limited to the amount you paid us in the 12 months before the claim."
+          ]
+        },
+        {
+          "title": "11. Governing law",
+          "body": [
+            "These Terms are governed by the laws of Rwanda, and the courts of Rwanda have jurisdiction over any dispute arising from them."
+          ]
+        },
+        {
+          "title": "12. Changes and contact",
+          "body": [
+            "We may update these Terms; the date at the top changes when we do, and continued use means you accept the update. Questions? Contact support@ikizamini.rw."
+          ]
+        }
+      ],
+      "contact": "Questions about these Terms? Email support@ikizamini.rw."
+    }
   },
   "theme": {
     "light": "Light",

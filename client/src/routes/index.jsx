@@ -7,6 +7,8 @@ import { ProtectedRoute, AdminRoute, GuestRoute } from '../components/RouteGuard
 
 import Home from '../pages/public/Home.jsx';
 import Pricing from '../pages/public/Pricing.jsx';
+import Privacy from '../pages/public/Privacy.jsx';
+import Terms from '../pages/public/Terms.jsx';
 import NotFound from '../pages/public/NotFound.jsx';
 
 import Login from '../pages/auth/Login.jsx';
@@ -51,6 +53,8 @@ export default function AppRoutes() {
         <Route path="practice" element={<PracticeSetup />} />
         <Route path="mock" element={<MockExam />} />
         <Route path="pricing" element={<Pricing />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="terms" element={<Terms />} />
       </Route>
 
       {/* Auth */}
