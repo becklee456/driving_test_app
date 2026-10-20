@@ -15,6 +15,7 @@ export const APP_NAV = [
   { to: '/app/bookmarks', labelKey: 'nav.bookmarks', icon: 'bookmark' },
   { to: '/app/mistakes', labelKey: 'nav.mistakes', icon: 'alert' },
   { to: '/app/billing', labelKey: 'nav.billing', icon: 'credit-card' },
+  { to: '/pricing', labelKey: 'nav.plans', icon: 'tag' },
 ];
 
 export const APP_BOTTOM_NAV = [

@@ -77,13 +77,18 @@ export function AppLayout() {
   const { t } = useTranslation();
   const { user, unreadNotifications } = useAuth();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
           <Logo size="sm" to="/app" />
-          <nav className="hidden flex-1 items-center justify-center gap-1 md:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
             {APP_NAV.map((item) => (
               <NavLink
                 key={item.to}
@@ -110,9 +115,41 @@ export function AppLayout() {
                 </span>
               ) : null}
             </Link>
+            <button
+              type="button"
+              className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={t('nav.menu')}
+              aria-expanded={mobileOpen}
+            >
+              <Icon name={mobileOpen ? 'x' : 'menu'} />
+            </button>
             <UserMenu />
           </div>
         </div>
+        {mobileOpen ? (
+          <div className="border-t border-slate-100 bg-white px-4 py-3 lg:hidden">
+            <nav className="grid grid-cols-2 gap-1">
+              {APP_NAV.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  onClick={() => setMobileOpen(false)}
+                  className={({ isActive }) =>
+                    clsx(
+                      'flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium',
+                      isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-100',
+                    )
+                  }
+                >
+                  <Icon name={item.icon} className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t(item.labelKey)}</span>
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+        ) : null}
       </header>
 
       <MaintenanceBanner />
