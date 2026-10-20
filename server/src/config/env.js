@@ -1,5 +1,4 @@
 import path from 'node:path';
-import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import dotenv from 'dotenv';
@@ -7,8 +6,8 @@ import dotenv from 'dotenv';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SERVER_ROOT = path.resolve(__dirname, '..', '..');
 
-const envFile = path.join(SERVER_ROOT, '.env');
-if (fs.existsSync(envFile)) dotenv.config({ path: envFile });
+// Loads ./.env from the working directory (server/ when run via npm). No explicit
+// path here: bundlers/File Trace would otherwise try to ship .env in the artifact.
 dotenv.config();
 
 const bool = (v, fallback = false) => {
