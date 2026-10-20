@@ -105,6 +105,22 @@ export async function updateSettings(req, res) {
   return success(res, { settings });
 }
 
+export async function updatePaymentSettings(req, res) {
+  const settings = await Settings.getSettings();
+  const { freeQuestionsAllowed, freePracticeAttemptsAllowed, payment } = req.body || {};
+  if (freeQuestionsAllowed !== undefined) settings.freeQuestionsAllowed = freeQuestionsAllowed;
+  if (freePracticeAttemptsAllowed !== undefined) settings.freePracticeAttemptsAllowed = freePracticeAttemptsAllowed;
+  if (payment && typeof payment === 'object') {
+    settings.payment = { ...(settings.payment || {}), ...payment };
+  }
+  settings.updatedBy = req.user._id;
+  await settings.save();
+  invalidateSettingsCache();
+
+  await recordActivity(req, { action: 'settings.update_payment', resource: 'settings', meta: { keys: Object.keys(req.body) } });
+  return success(res, { settings });
+}
+
 export default {
   overview,
   userGrowth,
@@ -117,4 +133,5 @@ export default {
   listAudit,
   getSettings,
   updateSettings,
+  updatePaymentSettings,
 };

@@ -6,6 +6,7 @@ import * as categoryController from '../controllers/category.controller.js';
 import * as userController from '../controllers/user.controller.js';
 import * as importController from '../controllers/import.controller.js';
 import * as reportController from '../controllers/report.controller.js';
+import * as paymentController from '../controllers/payment.controller.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
 import { requireStaff, requirePermission } from '../middleware/permissions.js';
@@ -227,7 +228,113 @@ router.patch(
   asyncHandler(adminController.updateSettings),
 );
 
-/* Audit */
-router.get('/audit', requirePermission(PERMISSIONS.AUDIT_VIEW), asyncHandler(adminController.listAudit));
+/* Payments */
+router.get('/payments', requirePermission(PERMISSIONS.BILLING_MANAGE), asyncHandler(paymentController.adminListPayments));
+router.get('/payments/:id', requirePermission(PERMISSIONS.BILLING_MANAGE), asyncHandler(paymentController.adminGetPayment));
+router.post(
+  '/payments/:id/approve',
+  requirePermission(PERMISSIONS.BILLING_MANAGE),
+  writeLimiter,
+  validate({ body: z.object({ note: z.string().max(300).optional() }) }),
+  asyncHandler(paymentController.adminApprovePayment),
+);
+router.post(
+  '/payments/:id/deny',
+  requirePermission(PERMISSIONS.BILLING_MANAGE),
+  writeLimiter,
+  validate({ body: z.object({ reason: z.string().trim().min(3).max(300) }) }),
+  asyncHandler(paymentController.adminDenyPayment),
+);
+
+/* Plans (admin) */
+const planEntitlementsSchema = z
+  .object({
+    dailyQuestions: z.coerce.number().int().min(-1).optional(),
+    dailyMockExams: z.coerce.number().int().min(-1).optional(),
+    dailyAIAnswers: z.coerce.number().int().min(-1).optional(),
+    mistakeReview: z.boolean().optional(),
+    advancedAnalytics: z.boolean().optional(),
+    downloadableReports: z.boolean().optional(),
+    adFree: z.boolean().optional(),
+    prioritySupport: z.boolean().optional(),
+  })
+  .strict()
+  .optional();
+
+router.get('/plans', requirePermission(PERMISSIONS.PLANS_MANAGE), asyncHandler(paymentController.listAllPlans));
+router.post(
+  '/plans',
+  requirePermission(PERMISSIONS.PLANS_MANAGE),
+  writeLimiter,
+  validate({
+    body: z.object({
+      code: z.string().trim().max(60),
+      name: z.string().trim().min(2).max(120),
+      description: z.string().max(600).optional(),
+      price: z.coerce.number().int().min(0),
+      originalPrice: z.coerce.number().int().min(0).nullable().optional(),
+      currency: z.string().trim().max(8).optional(),
+      durationDays: z.coerce.number().int().min(1).nullable().optional(),
+      isLifetime: z.boolean().optional(),
+      interval: z.enum(['day', 'week', 'month', 'year', 'lifetime']).optional(),
+      badge: z.string().trim().max(40).nullable().optional(),
+      features: z.array(z.string().trim().max(120)).max(30).optional(),
+      entitlements: planEntitlementsSchema,
+      order: z.coerce.number().int().optional(),
+      isActive: z.boolean().optional(),
+      isPopular: z.boolean().optional(),
+    }),
+  }),
+  asyncHandler(paymentController.adminCreatePlan),
+);
+router.patch(
+  '/plans/:id',
+  requirePermission(PERMISSIONS.PLANS_MANAGE),
+  writeLimiter,
+  validate({
+    body: z.object({
+      name: z.string().trim().min(2).max(120).optional(),
+      description: z.string().max(600).optional(),
+      price: z.coerce.number().int().min(0).optional(),
+      originalPrice: z.coerce.number().int().min(0).nullable().optional(),
+      currency: z.string().trim().max(8).optional(),
+      durationDays: z.coerce.number().int().min(1).nullable().optional(),
+      isLifetime: z.boolean().optional(),
+      interval: z.enum(['day', 'week', 'month', 'year', 'lifetime']).optional(),
+      badge: z.string().trim().max(40).nullable().optional(),
+      features: z.array(z.string().trim().max(120)).max(30).optional(),
+      entitlements: planEntitlementsSchema,
+      order: z.coerce.number().int().optional(),
+      isActive: z.boolean().optional(),
+      isPopular: z.boolean().optional(),
+    }),
+  }),
+  asyncHandler(paymentController.adminUpdatePlan),
+);
+router.delete('/plans/:id', requirePermission(PERMISSIONS.PLANS_MANAGE), asyncHandler(paymentController.adminDeactivatePlan));
+
+/* Payment settings */
+router.patch(
+  '/payment-settings',
+  requirePermission(PERMISSIONS.SETTINGS_MANAGE),
+  writeLimiter,
+  validate({
+    body: z.object({
+      freeQuestionsAllowed: z.coerce.number().int().min(0).max(1000).optional(),
+      freePracticeAttemptsAllowed: z.coerce.number().int().min(0).max(100).optional(),
+      payment: z
+        .object({
+          method: z.string().max(80).optional(),
+          recipientPhone: z.string().trim().max(20).optional(),
+          recipientName: z.string().trim().max(120).optional(),
+          currency: z.string().trim().max(8).optional(),
+          verificationWindowHours: z.coerce.number().int().min(1).max(72).optional(),
+          instructions: z.string().max(2000).optional(),
+        })
+        .optional(),
+    }),
+  }),
+  asyncHandler(adminController.updatePaymentSettings),
+);
 
 export default router;

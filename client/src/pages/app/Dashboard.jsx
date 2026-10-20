@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useProgress } from '../../hooks/useProgress.js';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { FreeLimitBanner } from '../../components/billing/FreeLimitBanner.jsx';
 import { Card, Badge, ProgressBar, Skeleton, EmptyState } from '../../components/ui/primitives.jsx';
 import { Ring } from '../../components/charts/index.jsx';
 import { Icon } from '../../components/icons.jsx';
@@ -61,6 +62,8 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+
+      <FreeLimitBanner />
 
       {activeQuiz ? (
         <Card className="flex items-center justify-between gap-4 border-brand-200 bg-brand-50 p-4">

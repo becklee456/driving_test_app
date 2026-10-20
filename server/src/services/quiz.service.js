@@ -4,6 +4,14 @@ import { Question, Quiz, UserAnswer, Bookmark, Settings, Category, User } from '
 import { gradeQuiz, rankCategories } from './scoring.service.js';
 import { addXp, evaluateAchievements, touchStreak } from './achievement.service.js';
 import { notify } from './notification.service.js';
+import {
+  assertPremiumForType,
+  assertDailyMockQuota,
+  assertDailyQuestionQuota,
+  getAccessState,
+  consumeFreeQuestions,
+  consumeFreePracticeAttempt,
+} from './entitlement.service.js';
 
 const ACTIVE_POOL = { status: 'active', examinable: true };
 
@@ -120,6 +128,29 @@ export async function startQuiz(user, { type = 'practice', options = {} } = {}) 
     throw ApiError.forbidden('Emeza email yawe mbere yo gukora ikizamini', 'EMAIL_NOT_VERIFIED');
   }
 
+  // Premium-only flows (mock exams, mistakes, bookmarks) require a subscription.
+  await assertPremiumForType(user, type);
+
+  const access = await getAccessState(user._id);
+  if (!access.isPremium && access.questionsLimitReached) {
+    throw ApiError.forbidden(
+      'Ikizamini cy’ubuntu kirangiye. Kora subscription ya premium kugira ngo ukomeze.',
+      'FREE_LIMIT_REACHED',
+      {
+        freeQuestionsAllowed: access.freeQuestionsAllowed,
+        freeQuestionsUsed: access.freeQuestionsUsed,
+        freeQuestionsRemaining: access.freeQuestionsRemaining,
+      },
+    );
+  }
+
+  const planEntitlements = access.subscription?.entitlements || null;
+
+  // Plan-level mock-exam quota (subscriptions with a finite dailyMockExams).
+  if (type === 'mock') {
+    await assertDailyMockQuota(planEntitlements, user._id);
+  }
+
   const { questions } = await buildQuestionPool({ user, type, options });
   if (questions.length < 5) {
     throw ApiError.badRequest(
@@ -129,6 +160,31 @@ export async function startQuiz(user, { type = 'practice', options = {} } = {}) 
       'INSUFFICIENT_QUESTIONS',
       { found: questions.length },
     );
+  }
+
+  // Free learners may only ever see questions within their remaining allowance.
+  if (!access.isPremium) {
+    const remaining = access.freeQuestionsRemaining;
+    if (remaining <= 0) {
+      throw ApiError.forbidden(
+        'Ikizamini cy’ubuntu kirangiye. Kora subscription ya premium kugira ngo ukomeze.',
+        'FREE_LIMIT_REACHED',
+        { freeQuestionsAllowed: access.freeQuestionsAllowed, freeQuestionsUsed: access.freeQuestionsUsed },
+      );
+    }
+    const trimmed = questions.slice(0, Math.min(questions.length, remaining));
+    if (trimmed.length < 5) {
+      throw ApiError.forbidden(
+        `Ufite ibibazo ${remaining} gusa bisigaye ku buntu. Bikenewe nibura 5. Kora subscription ya premium.`,
+        'FREE_LIMIT_REACHED',
+        { freeQuestionsRemaining: remaining },
+      );
+    }
+    questions.length = 0;
+    questions.push(...trimmed);
+  } else if (access.isPremium) {
+    // Plan-level daily question quota (subscriptions with a finite dailyQuestions).
+    await assertDailyQuestionQuota(planEntitlements, user._id, { needed: questions.length });
   }
 
   const isMock = type === 'mock';
@@ -255,6 +311,19 @@ export async function submitQuiz(user, quizId, { selections = {}, durationSec } 
 
   await persistUserAnswers(user, quiz, ordered, finalSelections);
   await updateUserStats(user, result, quiz);
+
+  // Consume free allowance for learners without an active subscription. Study
+  // sessions count towards distinct questions but not the practice-attempt cap.
+  const access = await getAccessState(user._id);
+  if (!access.isPremium) {
+    const answeredIds = ordered
+      .filter((q) => finalSelections[String(q._id)])
+      .map((q) => q._id);
+    await consumeFreeQuestions(user._id, answeredIds);
+    if (quiz.type !== 'study') {
+      await consumeFreePracticeAttempt(user._id);
+    }
+  }
 
   const graded = { quiz, result, questions: ordered, selections: finalSelections };
   return graded;

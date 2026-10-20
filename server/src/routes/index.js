@@ -5,6 +5,7 @@ import quizRoutes from './quiz.routes.js';
 import questionRoutes from './question.routes.js';
 import categoryRoutes from './category.routes.js';
 import adminRoutes from './admin.routes.js';
+import paymentRoutes from './payment.routes.js';
 import { loadSettings, maintenanceGuard } from '../middleware/settings.js';
 import config from '../config/env.js';
 import { success } from '../middleware/error.js';
@@ -31,6 +32,20 @@ router.get(
       requireEmailVerification: s.requireEmailVerification,
       maintenanceMode: s.maintenanceMode,
       announcement: s.announcement,
+      freeQuestionsAllowed: s.freeQuestionsAllowed,
+      freePracticeAttemptsAllowed: s.freePracticeAttemptsAllowed,
+      payment: {
+        method: s.payment?.method || 'Manual Mobile Money',
+        recipientPhone: s.payment?.recipientPhone || '0783632506',
+        recipientName: s.payment?.recipientName || 'Gisubizo Becken',
+        currency: s.payment?.currency || 'RWF',
+        verificationWindowHours: s.payment?.verificationWindowHours || 3,
+        instructions: s.payment?.instructions || '',
+      },
+      plans: await (async () => {
+        const { Plan } = await import('../models/index.js');
+        return Plan.find({ isActive: true }).sort({ order: 1, price: 1 }).lean();
+      })(),
     });
   }),
 );
@@ -47,6 +62,7 @@ router.use('/me', meRoutes);
 router.use('/quizzes', quizRoutes);
 router.use('/questions', questionRoutes);
 router.use('/categories', categoryRoutes);
+router.use('/payments', paymentRoutes);
 router.use('/admin', adminRoutes);
 
 export default router;

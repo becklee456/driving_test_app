@@ -31,6 +31,9 @@ export const PERMISSIONS = {
   ANALYTICS_VIEW: 'analytics:view',
   SETTINGS_MANAGE: 'settings:manage',
   AUDIT_VIEW: 'audit:view',
+
+  BILLING_MANAGE: 'billing:manage',
+  PLANS_MANAGE: 'plans:manage',
 };
 
 export const ALL_PERMISSIONS = Object.values(PERMISSIONS);
@@ -97,6 +100,8 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.ANALYTICS_VIEW,
     PERMISSIONS.AUDIT_VIEW,
     PERMISSIONS.SETTINGS_MANAGE,
+    PERMISSIONS.BILLING_MANAGE,
+    PERMISSIONS.PLANS_MANAGE,
   ],
   SUPER_ADMIN: ALL_PERMISSIONS,
 };

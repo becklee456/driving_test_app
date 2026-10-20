@@ -3,6 +3,7 @@ import { User, Notification } from '../models/index.js';
 import * as authService from '../services/auth.service.js';
 import { resetUserProgress } from '../services/progress.service.js';
 import { getLeaderboard } from '../services/stats.service.js';
+import { getAccessState } from '../services/entitlement.service.js';
 import { effectivePermissions, ROLES } from '../constants/permissions.js';
 import { success } from '../middleware/error.js';
 import { clearAuthCookies } from '../middleware/auth.js';
@@ -21,8 +22,11 @@ function presentUser(user) {
  * Current user
  * ------------------------------------------------------------------ */
 export async function getMe(req, res) {
-  const unreadNotifications = await Notification.countDocuments({ user: req.user._id, read: false });
-  return success(res, { user: presentUser(req.user), unreadNotifications });
+  const [unreadNotifications, access] = await Promise.all([
+    Notification.countDocuments({ user: req.user._id, read: false }),
+    getAccessState(req.user._id),
+  ]);
+  return success(res, { user: presentUser(req.user), unreadNotifications, access });
 }
 
 export async function updateMe(req, res) {

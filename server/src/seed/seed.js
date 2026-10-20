@@ -2,10 +2,11 @@ import fs from 'node:fs/promises';
 import config from '../config/env.js';
 import logger from '../config/logger.js';
 import { connectDatabase, disconnectDatabase, dropDatabase } from '../config/db.js';
-import { User, Category, Question, Achievement, Settings } from '../models/index.js';
+import { User, Category, Question, Achievement, Settings, Plan } from '../models/index.js';
 import { ROLES } from '../constants/permissions.js';
 import { CATEGORIES } from './categories.data.js';
 import { ACHIEVEMENTS } from './achievements.data.js';
+import { PLANS } from './plans.data.js';
 import { normalizeQuestionText } from '../utils/slug.js';
 import { normalizeImages } from '../services/question.service.js';
 
@@ -58,6 +59,23 @@ async function seedSettings() {
   await settings.save();
   logger.info('Settings: byateguwe (passing score ' + settings.passingScorePercent + '%)');
   return settings;
+}
+
+/**
+ * Upserts the default plan catalogue. Existing plans are left untouched on
+ * `$setOnInsert` semantics so administrator price/feature edits survive.
+ */
+async function seedPlans() {
+  let created = 0;
+  for (const plan of PLANS) {
+    const result = await Plan.updateOne(
+      { code: plan.code },
+      { $setOnInsert: { ...plan, currency: 'RWF', isActive: true } },
+      { upsert: true },
+    );
+    if (result.upsertedCount) created += 1;
+  }
+  logger.info(`Plans: ${PLANS.length} (${created} bishya)`);
 }
 
 async function seedUsers() {
@@ -197,6 +215,7 @@ async function main() {
   await seedCategories();
   await seedAchievements();
   await seedSettings();
+  await seedPlans();
   if (WITH_USERS) await seedUsers();
   if (WITH_QUESTIONS) {
     await importQuestions();
@@ -206,6 +225,7 @@ async function main() {
   const summary = {
     categories: await Category.countDocuments(),
     achievements: await Achievement.countDocuments(),
+    plans: await Plan.countDocuments(),
     users: await User.countDocuments(),
     questions: await Question.countDocuments(),
     activeQuestions: await Question.countDocuments({ status: 'active' }),

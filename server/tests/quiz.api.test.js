@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import { getApp, authHeader } from './helpers/app.js';
-import { createCategory, createQuestions, createUser, ensureSettings } from './helpers/fixtures.js';
+import { createCategory, createQuestions, createUser, ensureSettings, grantPremium } from './helpers/fixtures.js';
 
 const app = getApp();
 
@@ -61,6 +61,7 @@ describe('quiz API', () => {
   });
 
   it('grades a mock exam against the passing score', async () => {
+    await grantPremium(user);
     const start = await request(app).post('/api/quizzes').set(headers).send({ type: 'mock' });
     expect(start.status).toBe(201);
     const { quiz, questions } = start.body.data;
@@ -69,6 +70,12 @@ describe('quiz API', () => {
     const selections = Object.fromEntries(questions.map((q) => [q.id, 'a']));
     const res = await request(app).post(`/api/quizzes/${quiz.id}/submit`).set(headers).send({ selections });
     expect(res.body.data.score.passed).toBe(true);
+  });
+
+  it('blocks mock exams for free learners with PREMIUM_REQUIRED', async () => {
+    const start = await request(app).post('/api/quizzes').set(headers).send({ type: 'mock' });
+    expect(start.status).toBe(403);
+    expect(start.body.error.code).toBe('PREMIUM_REQUIRED');
   });
 
   it('returns the active quiz so a learner can resume', async () => {

@@ -8,6 +8,7 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "seed": "node src/seed/seed.js",
+    "seed:plans": "node src/scripts/seed-plans.js",
     "update:images": "node src/scripts/update-question-images.js",
     "reset": "node src/seed/seed.js --fresh",
     "test": "vitest run",
@@ -26,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0",
+    "multer": "^2.4.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

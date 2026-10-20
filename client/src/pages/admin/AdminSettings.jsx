@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAdminSettings, useUpdateSettings } from '../../hooks/useAdmin.js';
+import { useUpdatePaymentSettings } from '../../hooks/useBilling.js';
+import { useSettings } from '../../context/SettingsContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { Card, Skeleton, Alert, Divider, Toggle } from '../../components/ui/primitives.jsx';
 import { Button, Input, Textarea, Select } from '../../components/ui/form.jsx';
@@ -17,18 +19,34 @@ const BOOLEAN_KEYS = [
 export default function AdminSettings() {
   const { t } = useTranslation();
   const toast = useToast();
+  const { refresh } = useSettings();
   const { data: settings, isLoading } = useAdminSettings();
   const update = useUpdateSettings();
+  const updatePayment = useUpdatePaymentSettings();
   const [form, setForm] = useState(null);
+  const [payForm, setPayForm] = useState(null);
 
   useEffect(() => {
-    if (settings) setForm(settings);
+    if (settings) {
+      setForm(settings);
+      setPayForm({
+        freeQuestionsAllowed: settings.freeQuestionsAllowed ?? 40,
+        freePracticeAttemptsAllowed: settings.freePracticeAttemptsAllowed ?? 10,
+        method: settings.payment?.method || 'Manual Mobile Money',
+        recipientPhone: settings.payment?.recipientPhone || '',
+        recipientName: settings.payment?.recipientName || '',
+        currency: settings.payment?.currency || 'RWF',
+        verificationWindowHours: settings.payment?.verificationWindowHours || 3,
+        instructions: settings.payment?.instructions || '',
+      });
+    }
   }, [settings]);
 
-  if (isLoading || !form) return <Skeleton className="h-96" />;
+  if (isLoading || !form || !payForm) return <Skeleton className="h-96" />;
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
   const setBool = (key) => (v) => setForm((f) => ({ ...f, [key]: v }));
+  const setPay = (key) => (e) => setPayForm((f) => ({ ...f, [key]: e.target.value }));
 
   const save = async () => {
     try {
@@ -44,6 +62,27 @@ export default function AdminSettings() {
         announcement: form.announcement,
         ...Object.fromEntries(BOOLEAN_KEYS.map(([k]) => [k, Boolean(form[k])])),
       });
+      toast.success(t('settings.saved'));
+    } catch (err) {
+      toast.error(err.message || t('errors.generic'));
+    }
+  };
+
+  const savePayment = async () => {
+    try {
+      await updatePayment.mutateAsync({
+        freeQuestionsAllowed: Number(payForm.freeQuestionsAllowed),
+        freePracticeAttemptsAllowed: Number(payForm.freePracticeAttemptsAllowed),
+        payment: {
+          method: payForm.method,
+          recipientPhone: payForm.recipientPhone,
+          recipientName: payForm.recipientName,
+          currency: payForm.currency,
+          verificationWindowHours: Number(payForm.verificationWindowHours),
+          instructions: payForm.instructions,
+        },
+      });
+      await refresh();
       toast.success(t('settings.saved'));
     } catch (err) {
       toast.error(err.message || t('errors.generic'));
@@ -111,6 +150,50 @@ export default function AdminSettings() {
             <Divider className="mt-3" />
           </div>
         ))}
+      </Card>
+
+      <Card className="space-y-4 p-5">
+        <h3 className="text-sm font-semibold text-slate-900">{t('admin.payment_settings')}</h3>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Input label={t('admin.pay_method')} value={payForm.method} onChange={setPay('method')} />
+          <Input label={t('admin.pay_recipient_phone')} value={payForm.recipientPhone} onChange={setPay('recipientPhone')} />
+          <Input label={t('admin.pay_recipient_name')} value={payForm.recipientName} onChange={setPay('recipientName')} />
+          <Input label={t('admin.pay_currency')} value={payForm.currency} onChange={setPay('currency')} maxLength={8} />
+          <Input
+            label={t('admin.pay_window')}
+            type="number"
+            min="1"
+            max="168"
+            value={payForm.verificationWindowHours}
+            onChange={setPay('verificationWindowHours')}
+          />
+          <Input
+            label={t('admin.free_questions_allowed')}
+            type="number"
+            min="0"
+            max="1000"
+            value={payForm.freeQuestionsAllowed}
+            onChange={setPay('freeQuestionsAllowed')}
+          />
+        </div>
+        <Input
+          label={t('admin.free_attempts_allowed')}
+          type="number"
+          min="0"
+          max="1000"
+          value={payForm.freePracticeAttemptsAllowed}
+          onChange={setPay('freePracticeAttemptsAllowed')}
+        />
+        <Textarea
+          label={t('admin.pay_instructions')}
+          value={payForm.instructions}
+          onChange={setPay('instructions')}
+          rows={3}
+          hint={t('admin.pay_instructions_hint')}
+        />
+        <Button onClick={savePayment} loading={updatePayment.isPending} size="sm">
+          {t('admin.save_payment_settings')}
+        </Button>
       </Card>
 
       <div className="sticky bottom-20 md:bottom-4">

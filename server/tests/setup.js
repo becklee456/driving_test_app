@@ -12,6 +12,11 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await dropDatabase();
+  try {
+    await dropDatabase();
+  } catch {
+    // The test DB user may lack dropDatabase; per-collection cleanup in
+    // beforeEach already isolates tests, so teardown failure is safe to ignore.
+  }
   await disconnectDatabase();
 });

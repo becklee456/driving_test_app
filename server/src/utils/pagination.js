@@ -31,6 +31,7 @@ export function escapeRegex(input = '') {
 
 /** Builds a Mongo `$or` regex filter that tolerates Kinyarwanda accents. */
 export function textSearchFilter(search, fields) {
+  if (search === null || search === undefined) return null;
   const term = escapeRegex(String(search).trim());
   if (!term) return null;
   const re = new RegExp(term, 'i');

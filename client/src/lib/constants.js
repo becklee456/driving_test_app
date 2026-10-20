@@ -27,7 +27,11 @@ export const PERMISSIONS = {
   REPORTS_MANAGE: 'reports.manage',
   SETTINGS_MANAGE: 'settings.manage',
   AUDIT_VIEW: 'audit.view',
+  BILLING_MANAGE: 'billing:manage',
+  PLANS_MANAGE: 'plans:manage',
 };
+
+export const PAYMENT_STATUS = ['PENDING_REVIEW', 'UNDER_REVIEW', 'APPROVED', 'DENIED', 'EXPIRED'];
 
 export const QUIZ_TYPES = ['study', 'practice', 'mock', 'mistakes', 'bookmarks', 'category', 'daily'];
 

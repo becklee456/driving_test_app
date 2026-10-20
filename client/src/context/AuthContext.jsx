@@ -25,6 +25,7 @@ function hasSessionFlag() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [access, setAccess] = useState(null);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [loading, setLoading] = useState(() => hasSessionFlag());
 
@@ -38,6 +39,7 @@ export function AuthProvider({ children }) {
     storage.clear();
     setSessionFlag(false);
     setUser(null);
+    setAccess(null);
     setUnreadNotifications(0);
   }, []);
 
@@ -52,6 +54,7 @@ export function AuthProvider({ children }) {
         const data = await request({ url: '/me' });
         if (!active) return;
         setUser(data.user);
+        setAccess(data.access || null);
         setUnreadNotifications(data.unreadNotifications || 0);
       } catch {
         if (active) clearSession();
@@ -120,6 +123,7 @@ export function AuthProvider({ children }) {
   const refreshMe = useCallback(async () => {
     const data = await request({ url: '/me' });
     setUser(data.user);
+    setAccess(data.access || null);
     setUnreadNotifications(data.unreadNotifications || 0);
     return data.user;
   }, []);
@@ -135,6 +139,8 @@ export function AuthProvider({ children }) {
     return {
       user,
       setUser,
+      access,
+      setAccess,
       loading,
       isAuthenticated: Boolean(user),
       isStaff,
@@ -149,7 +155,7 @@ export function AuthProvider({ children }) {
       refreshMe,
       clearSession,
     };
-  }, [user, loading, unreadNotifications, login, loginTwoFactor, register, verifyEmail, logout, refreshMe, clearSession]);
+  }, [user, access, loading, unreadNotifications, login, loginTwoFactor, register, verifyEmail, logout, refreshMe, clearSession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

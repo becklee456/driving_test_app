@@ -52,6 +52,9 @@ const PATHS = {
   chevronLeft: 'M15 6l-6 6 6 6',
   database: 'M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3',
   activity: 'M3 12h4l3 8 4-16 3 8h4',
+  'credit-card': 'M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM2 10h20M6 15h4',
+  tag: 'M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01',
+  crown: 'M3 18h18M4 17l-1.5-9L8 12l4-7 4 7 5.5-4L20 17z',
 };
 
 export function Icon({ name, className = 'h-5 w-5', strokeWidth = 2, filled = false, ...props }) {

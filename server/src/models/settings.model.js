@@ -20,6 +20,19 @@ const settingsSchema = new Schema(
     announcement: { type: String, default: '' },
     xpPerCorrectAnswer: { type: Number, default: 5 },
     xpPerTest: { type: Number, default: 25 },
+
+    // --- Monetisation / manual Mobile Money settings ---
+    freeQuestionsAllowed: { type: Number, default: 40, min: 0 },
+    freePracticeAttemptsAllowed: { type: Number, default: 1, min: 0 },
+    payment: {
+      method: { type: String, default: 'Manual Mobile Money' },
+      recipientPhone: { type: String, default: '0783632506', trim: true },
+      recipientName: { type: String, default: 'Gisubizo Becken', trim: true },
+      currency: { type: String, default: 'RWF', trim: true, uppercase: true, maxlength: 8 },
+      verificationWindowHours: { type: Number, default: 3, min: 1, max: 72 },
+      instructions: { type: String, default: '', maxlength: 2000 },
+    },
+
     updatedBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
   },
   { timestamps: true },
