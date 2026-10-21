@@ -183,6 +183,71 @@ describe('plan prices are server-owned', () => {
   });
 });
 
+describe('plan visibility toggle (show/hide for users)', () => {
+  let admin;
+  let user;
+  let plan;
+
+  beforeEach(async () => {
+    await ensureSettings({
+      freeQuestionsAllowed: 40,
+      freePracticeAttemptsAllowed: 1,
+      payment: { verificationWindowHours: 3, recipientPhone: '0783632506', recipientName: 'Test Payee' },
+    });
+    admin = await createUser({ email: 'toggle-admin@test.rw', role: ROLES.ADMIN });
+    user = await createUser({ email: 'toggle-user@test.rw' });
+    plan = await createPlan({ code: 'monthly_pro_30d', name: 'Monthly Pro', price: 2500, durationDays: 30 });
+  });
+
+  it('hides a plan from the public list and blocks checkout when disabled', async () => {
+    const hide = await request(app)
+      .patch(`/api/admin/plans/${plan._id}`)
+      .set('Authorization', authHeader(admin))
+      .send({ isActive: false });
+    expect(hide.status).toBe(200);
+    expect(hide.body.data.plan.isActive).toBe(false);
+
+    const publicList = await request(app).get('/api/payments/plans');
+    expect(publicList.status).toBe(200);
+    expect(publicList.body.data.plans.map((p) => p.code)).not.toContain('monthly_pro_30d');
+
+    const config = await request(app).get('/api/config');
+    expect(config.status).toBe(200);
+    expect(config.body.data.plans.map((p) => p.code)).not.toContain('monthly_pro_30d');
+
+    const checkout = await submitPayment(user, plan);
+    expect(checkout.status).toBe(400);
+    expect(checkout.body.error.code).toBe('PLAN_INACTIVE');
+
+    const adminList = await request(app)
+      .get('/api/admin/plans')
+      .set('Authorization', authHeader(admin));
+    expect(adminList.status).toBe(200);
+    const adminPlan = adminList.body.data.plans.find((p) => p.code === 'monthly_pro_30d');
+    expect(adminPlan).toBeTruthy();
+    expect(adminPlan.isActive).toBe(false);
+  });
+
+  it('re-enables a hidden plan so it appears publicly and is purchasable again', async () => {
+    await request(app)
+      .patch(`/api/admin/plans/${plan._id}`)
+      .set('Authorization', authHeader(admin))
+      .send({ isActive: false });
+
+    const reenable = await request(app)
+      .patch(`/api/admin/plans/${plan._id}`)
+      .set('Authorization', authHeader(admin))
+      .send({ isActive: true });
+    expect(reenable.status).toBe(200);
+
+    const publicList = await request(app).get('/api/payments/plans');
+    expect(publicList.body.data.plans.map((p) => p.code)).toContain('monthly_pro_30d');
+
+    const checkout = await submitPayment(user, plan);
+    expect(checkout.status).toBe(201);
+  });
+});
+
 describe('plan entitlement quotas', () => {
   it('enforces the daily mock-exam quota from the subscription snapshot', async () => {
     const category = await createCategory();

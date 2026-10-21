@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAdminPlans, usePlanMutations } from '../../hooks/useBilling.js';
 import { useToast } from '../../context/ToastContext.jsx';
-import { Card, Badge, Skeleton, EmptyState } from '../../components/ui/primitives.jsx';
+import { Card, Badge, Skeleton, EmptyState, Toggle } from '../../components/ui/primitives.jsx';
 import { Button, Input, Textarea, Checkbox, Select } from '../../components/ui/form.jsx';
 import { PageHeader } from '../../components/ui/PageHeader.jsx';
 import { Modal } from '../../components/ui/Modal.jsx';
@@ -43,7 +43,7 @@ export default function AdminPlans() {
   const { t } = useTranslation();
   const toast = useToast();
   const { data: plans, isLoading } = useAdminPlans();
-  const { create, update, deactivate } = usePlanMutations();
+  const { create, update } = usePlanMutations();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -163,10 +163,10 @@ export default function AdminPlans() {
     }
   };
 
-  const runDeactivate = async (plan) => {
+  const toggleVisibility = async (plan) => {
     try {
-      await deactivate.mutateAsync(plan._id);
-      toast.success(t('admin.plan_deactivated'));
+      await update.mutateAsync({ id: plan._id, isActive: !plan.isActive });
+      toast.success(plan.isActive ? t('admin.plan_disabled') : t('admin.plan_enabled'));
     } catch (err) {
       toast.error(err.message || t('errors.generic'));
     }
@@ -200,7 +200,7 @@ export default function AdminPlans() {
                   <p className="font-mono text-xs text-slate-400">{plan.code}</p>
                 </div>
                 <div className="flex gap-1.5">
-                  {plan.isActive ? <Badge color="success">{t('common.active')}</Badge> : <Badge>{t('common.inactive')}</Badge>}
+                  {plan.isActive ? <Badge color="success">{t('common.active')}</Badge> : <Badge>{t('admin.plan_hidden')}</Badge>}
                   {planBadgeLabel(plan, t) ? <Badge color="brand">{planBadgeLabel(plan, t)}</Badge> : null}
                 </div>
               </div>
@@ -223,15 +223,17 @@ export default function AdminPlans() {
                 ) : null}
               </div>
 
-              <div className="mt-auto flex gap-2 pt-3">
-                <Button size="sm" variant="secondary" onClick={() => openEdit(plan)} className="flex-1">
+              <div className="mt-auto space-y-3 pt-3">
+                <Toggle
+                  id={`plan-visible-${plan._id}`}
+                  checked={plan.isActive}
+                  onChange={() => toggleVisibility(plan)}
+                  label={t('admin.plan_shown')}
+                  description={plan.isActive ? t('admin.plan_shown_hint') : t('admin.plan_hidden_hint')}
+                />
+                <Button size="sm" variant="secondary" onClick={() => openEdit(plan)} className="w-full">
                   <Icon name="edit" className="h-4 w-4" /> {t('common.edit')}
                 </Button>
-                {plan.isActive ? (
-                  <Button size="sm" variant="ghost" onClick={() => runDeactivate(plan)}>
-                    {t('admin.deactivate')}
-                  </Button>
-                ) : null}
               </div>
             </Card>
           ))}

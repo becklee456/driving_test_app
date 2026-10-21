@@ -23,7 +23,7 @@
     "home": "Ahabanza",
     "dashboard": "Imbonerahamwe",
     "practice": "Imyitozo",
-    "mock": "Ikizamini cy'igerageza",
+    "mock": "Ikizamini",
     "categories": "Ibyiciro",
     "progress": "Aho ugeze",
     "bookmarks": "Ibibitswe",
@@ -426,6 +426,12 @@
     "ent_ad_free": "Nta kwamamaza",
     "ent_priority_support": "Ubufasha bwihuse",
     "plan_deactivated": "Plani yahagaritswe.",
+    "plan_shown": "Kugaragajwe abakora",
+    "plan_shown_hint": "Kuboneka ku rupapuro rw'ibiciro kandi ishora ku gura.",
+    "plan_hidden": "Bidakunze kuboneka",
+    "plan_hidden_hint": "Bidanjye ku rupapuro rw'ibiciro; kugura biranswe.",
+    "plan_enabled": "Plani igeze kugaragajwe abakora.",
+    "plan_disabled": "Plani irakurwemo ku bakorera.",
     "deactivate": "Hagarika",
     "no_plans": "Nta plani ahari.",
     "payment_settings": "Igenamiterere ry'ubwishyu",
@@ -526,106 +532,98 @@
   },
   "policy": {
     "privacy": {
-      "title": "Politike yo Kubanga Amakuru",
-      "updated": "Amavugururo: 20 Oktoba 2026",
-      "intro": "Ikizamini cyo Gutwara ni serivisi yo kuyiterezaho ikizamini cyo gutwara mu Rwanda. Iyi politike igaragaje amakuru dusangira, impamvu dukora, n'uburyo dutegura. Ukoresheje porogaramu cyangwa wivudeme, ufata kwemera ibiri muri yo.",
+      "title": "Amategeko namabwiriza",
+      "updated": "Amavugururo: 20 Ukwakira 2026",
+      "intro": "Ikizamini cyo Gutwara ni serivisi yo kwitorezaho ikizamini cyo gutwara mu Rwanda. Aya mategeko namabwiriza agaragaza amakuru dukoresha, impamvu dukora, n'uburyo dukoramo. Ukoresheje porogaramu , usabwa kubahiriza ibiri muri yo.",
       "sections": [
         {
           "title": "1. Amakuru dusangira",
           "body": [
-            "Amakuru y'konti: amazina yawe yose, adiresi ya email, ijambo banga ryawe (rihifashishwa gusa mu buryo bwubakiwe), umwanya wawe, n'ibyo ukunda kutangazwa nayo.",
-            "Amakuru y'ubwishyu: nomero ya telefone wahishiye, amazina y'uwishyuranye, nomero y'ihaba rya Mobile Money, ubutumwa wahanyweheze provider, n'ifoto y'ubwishyu wikoreseje kugira ngo tugenzure.",
-            "Amakuru y'kwiga: ibizamini byawe, ibisubizo, amamaza, streak z'ibizamini, ibyo wabikoze, amakosa, amakuru y'ifatabuguzi n'ubwishamwo, n'ibitonderwa byawe ku bibazo.",
-            "Amakuru tekiniki: adiresi ya IP, amakuru y'ibizamini byo winjiye, n'ibiterekwa mu rwego rwo kuriye serivisi nk'inyinshi zo kwinjira n'imitaro ya rate limit.",
-            "Imibare y'uko porogaramu ikorwa: imibare y'amakuru gatagatijwe ivuye kuri Vercel Web Analytics. Nta zina ziri muri yo kandi nta buryo bwo kuzwi ko uri we."
+            "Amakuru ya'konti: amazina yawe yose, adiresi ya email, ijambo banga ryawe (bikoreshwa mu buryo buboneye), umwanya wawe, n'ibyo ukunda kutangazwa nayo.",
+            "Amakuru y'ubwishyu: nomero ya telefone wishyuriyeho, amazina y'uwishyuye, nomero yihariye ya messaje wabonye umaze kwishyura, ubutumwa wahawe umazae kwishyura, n'ifoto ya messaje wabonye kugira ngo tugenzure.",
+            "Amakuru yo'kwiga: ibizamini byawe, ibisubizo, amamaza, streak z'ibizamini, ibyo wakoze, amakosa, amakuru y'ifatabuguzi, n'ibyitonderwa byawe ku bibazo.",
+            "Amakuru tekiniki: adiresi ya IP, amakuru y'ibizamini byose winjiyemo, n'ibiterekwa mu rwego rwo kuriye serivisi nkimikorere yimbere ya system.",
+            "Imibare y'uko porogaramu ikorwa: imibare y'amakuru ivuye kuri Vercel Web Analytics. Nta makuru yawe atangwa."
           ]
         },
         {
           "title": "2. Dukoresha amakuru yawe gutya",
           "body": [
-            "Gukoresha serivisi: kubaka ibizamini byawe, kubyisherema no kugaragaza aho ugeze, streak zawe n'ibicupa.",
-            "Gukenzura ubwishyu: abakorera ubwishyu bareretse ifoto yawe bakora ifatabuguzi ryawe. Bicuwe mu buryo budashobora guhindurwa (byishyurwe, iminsi, decisions) kubera konte n'amakuru meza.",
-            "Gukura serivisi: kubuza ba hacker, kubuza ko winjiye cyane, no kubika ibiterekwa by'ababoro (audit logs).",
-            "Kuvuga nawe: ibitumwa bya email nk'igihindura ijambo banga n'amakuru y'umutekano, n'itangazo mu porogaramu ubwidanye.",
-            "Gukomeza guca urubuga: imibare y'ibibumbano ntibumenya umuntu ku ruhande."
+            "Gukoresha serivisi: kubaka ibizamini byawe, kubikugezaho no kugaragaza aho ugeze, intege nke zawe.",
+            "Gukenzura ubwishyu: abayobora system bagenzura ubwishyu nibihamya watanze tugakora ifatabuguzi ryawe. Biciye mu buryo budashobora guhindurwa cyangwa ngo amakuru yawe abe yasibwa .",
+            "Gukura serivisi: kubuza aba hacker, kubuza ko winjiye cyane, no kubika ibiterekwa by'araporo (audit logs).",
+            "Kuvugana nawe: ubutumwa bwa email nk'oguhindura ijambo banga n'amakuru y'umutekano, n'itangazo mu porogaramu."
           ]
         },
         {
           "title": "3. Ifoto z'ubwishyu na Mobile Money",
           "body": [
-            "Ifoto zubikwa mu bihe bidafungura kuri buri wese, kandi ni ababoro bakenzura ubwishyu gusa abashobora kuzireba.",
-            "Reba ko nomero y'umwishyuri, amacumi n'irema rya transaction uhuzwa n'ikonti yerekewe kuri checkout. Ntitugira kediyo (PIN) yawe, kandi ubwishyu bujya unyuze k'uwerekewe mu porogaramu — nta hantu t uwagira."
+            "Ifoto zibikwa mu buryo zitafungurwa na buri buri wese, kandi ababifiye ububasha bwo kugenzura ubwishyu gusa nibo bashobora kuzireba.",
+            "Reba ko nomero y'umwishyuri, amacumi n'irema rya transaction uhuzwa n'ikonti yerekewe kuri checkout. Ntidusaba Umubare wibanga (PIN) wawe, kandi ubwishyu bwemezwa unyuze kuri porogaramu — Ntahandi amakuru atanwgwa"
           ]
         },
         {
-          "title": "4. Cookies n'ububiko bw'ikarita",
+          "title": "4. Amakuru yibyo ukunda gukoresha n'ububiko bw'ikarita",
           "body": [
-            "Tukoresheje cookies z'ingenzi gusa n'ububiko bw'ikarita kugira ngo tubuke n'umwanya ukoresheje konti yawe no kurinda ifomu ku kugurisha. Ushobora kuzisigura uko ari buri gihe; uzatandukwa gusa.",
-            "Vercel Web Analytics ntikozesa cookies kandi nta make manaka yihariye uwagira."
+            "Dukoresheje Amakuru yibyo ukunda gukoresha  n'ububiko bw'ikarita kugira ngo turinde amakuru ya konti yawe no kurinda fomu zitizewe",
+            "Vercel Web Analytics ntikoresha Amakuru yibyo ukunda gukoresha kandi nta naho itanga amakuru yawe."
           ]
         },
         {
-          "title": "5. Duha ihe amakuru",
+          "title": "5. Itangwa Ryamakuru",
           "body": [
             [
-              "Abakorera ubwishyu ba porogaramu n'abafasha abakora.",
-              "Abatanga serivisi ya hosting, database n'email; bakora amakuru gusa nk'uko byatanzwe, banga umwanda.",
-              "Abagenerukabyo, niba amategeko y'u Rwanda byasabye cyangwa kubera umutekano w'abakora n'urubuga.",
+              "Abakoresha ubwishyu ba porogaramu n'abafasha abakora.",
+              "Abatanga serivisi ya hosting, database n'email; bakora amakuru gusa nk'uko byatanzwe.",
               "Ntitugurisha cyangwa tugurana amakuru yawe yihariye kuri wese."
             ]
           ]
         },
         {
-          "title": "6. Igihe tubikamo",
+          "title": "6. Igihe tubikamo amakuru",
           "body": [
-            "Igihe konti yawe irimo, nyuma y'yo gusa igihe kisabwa (ibyishyu, log, imitunganyagituguza).",
-            "Ushobora kusaba ko konti yawe ifaswa, tukasigura cyangwa kutuza amakuru yawe yihariye, uretse ibyo amategeko asaba (nk'ibicuwe by'ubwishyu bwamaze)."
+            "Igihe konti yawe irimo gukoreshwa, nyuma gusa yi igihe kisabwa (ubwishyu, ibyakozwe).",
+            "Ushobora kusaba ko konti yawe ifashwa, tukagufasha kwita kuri konti yawe yo muri iyi system."
           ]
         },
         {
           "title": "7. Umutekano",
           "body": [
-            "Ijambo banga ryubikwa mu buryo bwubakiwe (bcrypt), amakuru ahaguruka mu buryo bwubakwe (HTTPS), kandi abashobora kureba amakuru yihariye ni bo gusa bakeneye.",
-            "Nta murandasi uri 100% umutekano. Keba ijambo banga ryawe si ry'uwundi, ukareba ibitangaza bitandukanye uriya i Konti yawe."
+            "Ijambo banga ribikwa mu buryo buhishwe, amakuru akwirakwiza muburyo buhishwe kandi bwizewe (HTTPS), kandi abashobora kureba amakuru yihariye ni bo gusa babyemerewe.",
+            "Nta murandasi iri 100% umutekano. kora kuburyo amakuru yawe yigenzi aba akomeye cyane."
           ]
         },
         {
           "title": "8. Uburenganzira bwawe",
           "body": [
-            "Ushobora kureba, kuvugurura cyangwa gufasha amakuru tufitiye mu konti yawe, n'usohora amakuru y'ibizamini byawe.",
-            "Ushobora no guhagarika gukoreshwa kw'amakuru runaka, cyangwa guhagarika ubwemero (consent) ukoresheje gufasha konti yawe. Tuandikure, dukagena ibisabwa umuntu wemeje."
+            "Ushobora kureba, kuvugurura cyangwa gufata amakuru yawe  muri konti yawe, ushobora no gusohora amakuru y'ibizamini byawe.",
+            "Ushobora no guhagarika gukoreshwa kw'amakuru runaka, cyangwa guhagarika konti yawe ukoresheje konti yawe. Twandikire, tugufashe aho bigoranye."
           ]
         },
         {
-          "title": "9. Abana",
+          "title": "10. Guhindura aya mategeko namabwiriza",
           "body": [
-            "Iyi porogaramu ntiremye abana munsi y'imyaka 13. Niba wumvise umwana yatanzwe amakuru yihariye, tuandikure dukabimwesera."
+            "Tushobora kuvugurura aya mategeko namabwiriza. Itariki y'ivugururo irahinduka, kandi uko ukomeza gukoresha porogaramu uzajya umenya niba yahindutse."
           ]
         },
         {
-          "title": "10. Guhindura iyi politike",
+          "title": "11. Tumenyeshe ikibazo",
           "body": [
-            "Tushobora kuvugurura iyi politike. Itariki y'ivugururo irahinduka, kandi ukomeza gukoresha porogaramu bumenya wemera iyivuguruye."
-          ]
-        },
-        {
-          "title": "11. Tutumaniriza",
-          "body": [
-            "Niba ufite ibibazo kuri iyi politike cyangwa amakuru yawe, tuandikure kuri support@ikizamini.rw."
+            "Niba ufite ibibazo kuri aya mategeko namabwiriza cyangwa amakuru yawe, twandikire kuri newcreativecentury@gmail.com."
           ]
         }
       ],
-      "contact": "Ifite ibibazo kuri amakuru? Ohereza support@ikizamini.rw tukagisubiza."
+      "contact": "Ifite ibibazo kuri aya amakuru? Ohereza newcreativecentury@gmail.com tukagisubiza."
     },
     "terms": {
       "title": "Amategeko yo Gukoresha",
-      "updated": "Amavugururo: 20 Oktoba 2026",
-      "intro": "Aya mategeko ageza ku buryo bukwemewe bwo gukoresheje Ikizamini cyo Gutwara. Ukoreseje porogaramu cyangwa wivudeme, wemera aya mategeko. Niba udabyemera, ntukoreshe.",
+      "updated": "Amavugururo: 20 ukwakira 2026",
+      "intro": "Aya mategeko akoze ku buryo akwemerera kwitoza kuzakora Ikizamini cyo Gutwara. Gukoresha iyi porogaramu, bigusaba kubanza kwemera aya mategeko. Niba utayemera, ntuyikoreshe.",
       "sections": [
         {
           "title": "1. Serivisi",
           "body": [
-            "Porogaramu yatanga ibibazo by'igerageza ry'ibyamamaza, ibizamini bya kugerageza, no kubona aho ugeze, hamwe na plan zihawe. Ibyo byihariye n'imitaro (nk'imitaro ya bibazo ku munsi) biragaragajwe mu porogaramu kandi birashobora guhinduka."
+            "Porogaramu yatanga ibibazo by'igerageza ry'ibyamamaza, ibizamini bya kugerageza, no kubona aho ugeze, hamwe ni fatabuguzi zihawe. Ibyo byihariye n'imitaro (nk'imitaro ya bibazo ku munsi) biragaragajwe mu porogaramu kandi birashobora guhinduka."
           ]
         },
         {
@@ -704,7 +702,7 @@
           ]
         }
       ],
-      "contact": "Ifite ibibazo kuri aya mategeko? Ohereza support@ikizamini.rw."
+      "contact": "Ifite ibibazo kuri aya mategeko? Cyohereza kuri newcreativecentury@gmail.com."
     }
   },
   "theme": {
