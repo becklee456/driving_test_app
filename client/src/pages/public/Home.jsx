@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useCategories } from '../../hooks/useCategories.js';
 import { useTestimonials } from '../../hooks/useTestimonials.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { Card, Skeleton, Badge } from '../../components/ui/primitives.jsx';
