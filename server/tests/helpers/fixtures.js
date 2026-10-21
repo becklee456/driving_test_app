@@ -3,6 +3,15 @@ import { User, Category, Question, Settings, Plan, Subscription } from '../../sr
 import { ROLES } from '../../src/constants/permissions.js';
 import { invalidateSettingsCache } from '../../src/middleware/settings.js';
 
+/**
+ * A buffer that starts with real PNG magic bytes so the proof-upload
+ * magic-byte sniffer accepts it (client MIME types are not trusted).
+ */
+export function fakePngBuffer() {
+  const header = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  return Buffer.concat([header, Buffer.alloc(64, 1)]);
+}
+
 export async function createCategory(overrides = {}) {
   return Category.create({
     name: 'Ibimenyetso by’umuhanda',

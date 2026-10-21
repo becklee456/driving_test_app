@@ -127,14 +127,11 @@ export async function updateUser(req, res) {
   const user = await User.findById(req.params.id);
   if (!user) throw ApiError.notFound('Nta konti ibonetse', 'USER_NOT_FOUND');
 
-  const { fullName, phone, role, status, permissions, notes } = req.body;
+  // Only profile/status fields. Role and permissions are intentionally NOT
+  // accepted here - they are handled exclusively by updateUserRole behind the
+  // ROLES_MANAGE permission, which prevents mass-assignment privilege escalation.
+  const { fullName, phone, status, notes } = req.body;
 
-  if (role !== undefined && role !== user.role) {
-    if (user._id.equals(req.user._id)) throw ApiError.badRequest('Ntushobora guhindura uruhare rwawe bwite', 'CANNOT_CHANGE_OWN_ROLE');
-    user.role = role;
-    user.permissions = [];
-  }
-  if (permissions !== undefined) user.permissions = permissions;
   if (fullName !== undefined) user.fullName = fullName;
   if (phone !== undefined) user.phone = phone || null;
   if (notes !== undefined) user.notes = notes;
@@ -151,19 +148,65 @@ export async function updateUser(req, res) {
     action: 'user.update',
     resource: 'user',
     resourceId: user._id,
-    meta: { role, status, permissions },
+    meta: { status },
+  });
+  return success(res, { user: presentUser(user) });
+}
+
+/** Role/permission changes. Guarded by ROLES_MANAGE at the route level. */
+export async function updateUserRole(req, res) {
+  if (!mongoose.isValidObjectId(req.params.id)) throw ApiError.badRequest('Indangamuntu itariyo', 'INVALID_ID');
+  const user = await User.findById(req.params.id);
+  if (!user) throw ApiError.notFound('Nta konti ibonetse', 'USER_NOT_FOUND');
+
+  const { role, permissions } = req.body;
+  if (user._id.equals(req.user._id)) {
+    throw ApiError.badRequest('Ntushobora guhindura uruhare rwawe bwite', 'CANNOT_CHANGE_OWN_ROLE');
+  }
+  if (role !== undefined && role !== user.role) {
+    user.role = role;
+    user.permissions = [];
+  }
+  if (permissions !== undefined) user.permissions = permissions;
+  await user.save();
+
+  await recordActivity(req, {
+    action: 'user.update_role',
+    resource: 'user',
+    resourceId: user._id,
+    meta: { role, permissions },
   });
   return success(res, { user: presentUser(user) });
 }
 
 export async function suspendUser(req, res) {
-  req.body.status = 'suspended';
-  return updateUser(req, res);
+  if (!mongoose.isValidObjectId(req.params.id)) throw ApiError.badRequest('Indangamuntu itariyo', 'INVALID_ID');
+  if (String(req.params.id) === String(req.user._id)) {
+    throw ApiError.badRequest('Ntushobora guhagarika konti yawe bwite', 'CANNOT_SUSPEND_SELF');
+  }
+  const user = await User.findById(req.params.id);
+  if (!user) throw ApiError.notFound('Nta konti ibonetse', 'USER_NOT_FOUND');
+
+  user.status = 'suspended';
+  if (req.body?.notes) user.notes = String(req.body.notes).slice(0, 2000);
+  await user.save();
+  await authService.revokeAllSessions(user._id, 'status_suspended');
+
+  await recordActivity(req, { action: 'user.suspend', resource: 'user', resourceId: user._id });
+  return success(res, { user: presentUser(user) });
 }
 
 export async function activateUser(req, res) {
-  req.body.status = 'active';
-  return updateUser(req, res);
+  if (!mongoose.isValidObjectId(req.params.id)) throw ApiError.badRequest('Indangamuntu itariyo', 'INVALID_ID');
+  const user = await User.findById(req.params.id);
+  if (!user) throw ApiError.notFound('Nta konti ibonetse', 'USER_NOT_FOUND');
+
+  user.status = 'active';
+  if (req.body?.notes) user.notes = String(req.body.notes).slice(0, 2000);
+  await user.save();
+
+  await recordActivity(req, { action: 'user.activate', resource: 'user', resourceId: user._id });
+  return success(res, { user: presentUser(user) });
 }
 
 export async function deleteUser(req, res) {
@@ -211,6 +254,7 @@ export default {
   listUsers,
   getUser,
   updateUser,
+  updateUserRole,
   suspendUser,
   activateUser,
   deleteUser,

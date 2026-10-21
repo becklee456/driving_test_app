@@ -1,27 +1,20 @@
-const TOKEN_KEY = 'idt.accessToken';
+/**
+ * Access-token holder. The token lives ONLY in module memory: it is never
+ * persisted to localStorage/sessionStorage so XSS or a shared machine cannot
+ * read it after the tab closes. Requests are authenticated either with this
+ * in-memory Bearer token or the httpOnly `idt_access` cookie set by the API.
+ */
+let accessToken = null;
 
 export const storage = {
   getToken() {
-    try {
-      return localStorage.getItem(TOKEN_KEY);
-    } catch {
-      return null;
-    }
+    return accessToken;
   },
   setToken(token) {
-    try {
-      if (token) localStorage.setItem(TOKEN_KEY, token);
-      else localStorage.removeItem(TOKEN_KEY);
-    } catch {
-      /* ignore */
-    }
+    accessToken = token || null;
   },
   clear() {
-    try {
-      localStorage.removeItem(TOKEN_KEY);
-    } catch {
-      /* ignore */
-    }
+    accessToken = null;
   },
 };
 

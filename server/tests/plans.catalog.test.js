@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import { getApp, authHeader } from './helpers/app.js';
-import { createCategory, createQuestions, createUser, createPlan, ensureSettings, grantPremium } from './helpers/fixtures.js';
+import { createCategory, createQuestions, createUser, createPlan, ensureSettings, grantPremium, fakePngBuffer } from './helpers/fixtures.js';
 import { syncPlanCatalogue } from '../src/scripts/seed-plans.js';
 import { PLANS, LEGACY_PLAN_CODES } from '../src/seed/plans.data.js';
 import { Plan, PaymentTransaction, Subscription, Quiz } from '../src/models/index.js';
@@ -24,7 +24,7 @@ async function submitPayment(user, plan, extraFields = {}) {
     .field('payerName', 'John Doe')
     .field('payerPhone', '0781234567');
   for (const [key, value] of Object.entries(extraFields)) req.field(key, String(value));
-  return req.attach('proof', Buffer.from('fake-image-bytes'), { filename: 'proof.png', contentType: 'image/png' });
+  return req.attach('proof', fakePngBuffer(), { filename: 'proof.png', contentType: 'image/png' });
 }
 
 describe('premium plan catalogue seed', () => {

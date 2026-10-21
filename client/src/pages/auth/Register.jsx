@@ -46,6 +46,7 @@ export default function Register() {
         fullName: form.fullName.trim(),
         email: form.email.trim(),
         password: form.password,
+        confirmPassword: form.confirmPassword,
         phone: form.phone.trim() || undefined,
       });
       toast.success(t('auth.register_success'));

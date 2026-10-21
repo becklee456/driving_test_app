@@ -9,6 +9,32 @@ export const MAX_PROOF_BYTES = 5 * 1024 * 1024; // 5 MB
 
 const BUCKET = 'paymentProofs';
 
+/**
+ * Detects the real image type from magic bytes. Client-declared MIME types are
+ * never trusted on their own - the file header must match an allowed format.
+ */
+export function sniffImageType(buffer) {
+  if (!buffer || buffer.length < 12) return null;
+  // PNG: 89 50 4E 47
+  if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) return 'image/png';
+  // JPEG: FF D8 FF
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) return 'image/jpeg';
+  // WEBP: "RIFF" .... "WEBP"
+  if (
+    buffer[0] === 0x52 &&
+    buffer[1] === 0x49 &&
+    buffer[2] === 0x46 &&
+    buffer[3] === 0x46 &&
+    buffer[8] === 0x57 &&
+    buffer[9] === 0x45 &&
+    buffer[10] === 0x42 &&
+    buffer[11] === 0x50
+  ) {
+    return 'image/webp';
+  }
+  return null;
+}
+
 function bucket() {
   return new mongoose.mongo.GridFSBucket(mongoose.connection.db, { bucketName: BUCKET });
 }
@@ -53,18 +79,25 @@ export async function storeProof(buffer, { mimeType, originalFilename } = {}) {
   if (buffer.length > MAX_PROOF_BYTES) {
     throw ApiError.badRequest('Ifoto ni nini cyane (max 5MB)', 'PROOF_TOO_LARGE');
   }
-  if (mimeType && !ALLOWED_MIME_TYPES.includes(mimeType)) {
-    throw ApiError.badRequest('Ubwoko bw’ifoto ntibwemewe', 'INVALID_PROOF_TYPE');
+  // Trust the bytes, not the client-declared MIME type: the header must match
+  // an allowed image format, and it must agree with the declared type.
+  const sniffed = sniffImageType(buffer);
+  if (!sniffed || !ALLOWED_MIME_TYPES.includes(sniffed)) {
+    throw ApiError.badRequest('Ifoto igomba kuba JPEG, PNG cyangwa WEBP gusa', 'INVALID_PROOF_TYPE');
   }
+  if (mimeType && ALLOWED_MIME_TYPES.includes(mimeType) && mimeType !== sniffed) {
+    throw ApiError.badRequest('Ubwoko bw’ifoto ntibwahuye n’umwanya wa dosiye', 'PROOF_TYPE_MISMATCH');
+  }
+  const finalMime = sniffed;
 
-  const ext = mimeType === 'image/png' ? 'png' : mimeType === 'image/webp' ? 'webp' : 'jpg';
+  const ext = finalMime === 'image/png' ? 'png' : finalMime === 'image/webp' ? 'webp' : 'jpg';
   const safeName = `${crypto.randomUUID()}.${ext}`;
 
   const uploadStream = bucket().openUploadStream(safeName, {
-    contentType: mimeType || 'application/octet-stream',
+    contentType: finalMime,
     metadata: {
       originalFilename: originalFilename ? String(originalFilename).slice(0, 200) : null,
-      mimeType: mimeType || null,
+      mimeType: finalMime,
       uploadedAt: new Date(),
     },
   });
@@ -82,7 +115,7 @@ export async function storeProof(buffer, { mimeType, originalFilename } = {}) {
     proofImageUrl: `/api/payments/proof/${id}`,
     metadata: {
       originalFilename: originalFilename ? String(originalFilename).slice(0, 200) : null,
-      mimeType: mimeType || null,
+      mimeType: finalMime,
       fileSize: buffer.length,
       uploadedAt: new Date(),
     },
@@ -117,7 +150,8 @@ export async function streamProof(publicId, res) {
   if (!file) throw ApiError.notFound('Ifoto ntibonetse', 'PROOF_NOT_FOUND');
 
   res.set('Content-Type', file.contentType || 'application/octet-stream');
-  res.set('Cache-Control', 'private, max-age=300');
+  // Financial proof images: never cache in any shared or browser cache.
+  res.set('Cache-Control', 'private, no-store');
   res.set('Content-Length', String(file.length));
 
   await new Promise((resolve, reject) => {

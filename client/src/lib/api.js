@@ -68,7 +68,15 @@ export function normalizeError(error) {
   if (error?.isNormalized) return error;
   const status = error?.response?.status || 0;
   const payload = error?.response?.data?.error;
-  const normalized = new Error(payload?.message || error.message || 'Habaye ikibazo. Ongera ugerageze.');
+  // 5xx responses may carry internal messages - never surface them; show a
+  // generic client-side message instead.
+  let message;
+  if (status >= 500) {
+    message = 'Habaye ikibazo kuri seriveri. Gerageza nyuma gato.';
+  } else {
+    message = payload?.message || error.message || 'Habaye ikibazo. Ongera ugerageze.';
+  }
+  const normalized = new Error(message);
   normalized.isNormalized = true;
   normalized.status = status;
   normalized.code = payload?.code || (status ? `HTTP_${status}` : 'NETWORK_ERROR');

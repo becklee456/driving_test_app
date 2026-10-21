@@ -38,7 +38,7 @@ describe('maintenance mode', () => {
 
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ fullName: 'New User', email: 'new@test.rw', password: 'Password123' });
+      .send({ fullName: 'New User', email: 'new@test.rw', password: 'Password123', confirmPassword: 'Password123' });
     expect(res.status).toBe(403);
     expect(res.body.error.code).toBe('MAINTENANCE_MODE');
   });

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import ApiError from '../utils/api-error.js';
-import { Question, Quiz, UserAnswer, Bookmark, Settings, Category, User } from '../models/index.js';
+import { Question, Quiz, UserAnswer, Bookmark, Settings, Category, User, Entitlement } from '../models/index.js';
 import { gradeQuiz, rankCategories } from './scoring.service.js';
 import { addXp, evaluateAchievements, touchStreak } from './achievement.service.js';
 import { notify } from './notification.service.js';
@@ -187,28 +187,68 @@ export async function startQuiz(user, { type = 'practice', options = {} } = {}) 
     await assertDailyQuestionQuota(planEntitlements, user._id, { needed: questions.length });
   }
 
+  // Free learners: atomically reserve the questions this quiz is about to
+  // consume so parallel quiz starts cannot race past the allowance.
+  let reservedQuestions = 0;
+  if (!access.isPremium) {
+    reservedQuestions = questions.length;
+    const allowedCeiling = Number.isFinite(access.freeQuestionsAllowed) ? access.freeQuestionsAllowed : 40;
+    const reserve = await Entitlement.findOneAndUpdate(
+      {
+        user: user._id,
+        $expr: {
+          $lte: [
+            { $add: [{ $ifNull: ['$freeQuestionsUsed', 0] }, { $ifNull: ['$pendingReservedQuestions', 0] }, reservedQuestions] },
+            allowedCeiling,
+          ],
+        },
+      },
+      { $inc: { pendingReservedQuestions: reservedQuestions } },
+      { new: true },
+    );
+    if (!reserve) {
+      throw ApiError.forbidden(
+        'Ikizamini cy’ubuntu kirangiye. Kora subscription ya premium kugira ngo ukomeze.',
+        'FREE_LIMIT_REACHED',
+        { freeQuestionsAllowed: access.freeQuestionsAllowed, freeQuestionsUsed: access.freeQuestionsUsed },
+      );
+    }
+  }
+
   const isMock = type === 'mock';
   const timeLimitSec = isMock ? settings.examDurationMinutes * 60 : null;
 
-  const quiz = await Quiz.create({
-    user: user._id,
-    type,
-    title: isMock ? 'Ikizamini cy’igerageza' : 'Imyitozo',
-    config: {
-      requestedCount: questions.length,
-      categories: await resolveCategoryIds(options.categories || []),
-      difficulty: options.difficulty || 'all',
-      mode: options.mode || 'random',
-      feedbackMode: options.feedbackMode || (isMock ? 'end' : 'immediate'),
-      passingScore: isMock ? settings.passingScorePercent : null,
-    },
-    questions: questions.map((q, i) => ({ question: q._id, order: i, category: q.category?._id || q.category || null })),
-    answers: questions.map((q) => ({ question: q._id })),
-    startedAt: new Date(),
-    timeLimitSec,
-    expiresAt: timeLimitSec ? new Date(Date.now() + timeLimitSec * 1000) : null,
-    score: { total: questions.length, passingScore: isMock ? settings.passingScorePercent : null },
-  });
+  let quiz;
+  try {
+    quiz = await Quiz.create({
+      user: user._id,
+      type,
+      title: isMock ? 'Ikizamini cy’igerageza' : 'Imyitozo',
+      config: {
+        requestedCount: questions.length,
+        categories: await resolveCategoryIds(options.categories || []),
+        difficulty: options.difficulty || 'all',
+        mode: options.mode || 'random',
+        // feedbackMode is server-derived only. Mock exams must never reveal
+        // answers before submission, regardless of what the client sends.
+        feedbackMode: isMock ? 'end' : 'immediate',
+        passingScore: isMock ? settings.passingScorePercent : null,
+        reservedQuestions,
+      },
+      questions: questions.map((q, i) => ({ question: q._id, order: i, category: q.category?._id || q.category || null })),
+      answers: questions.map((q) => ({ question: q._id })),
+      startedAt: new Date(),
+      timeLimitSec,
+      expiresAt: timeLimitSec ? new Date(Date.now() + timeLimitSec * 1000) : null,
+      score: { total: questions.length, passingScore: isMock ? settings.passingScorePercent : null },
+    });
+  } catch (err) {
+    // Release the reservation if the quiz could not be created.
+    if (reservedQuestions > 0) {
+      await Entitlement.updateOne({ user: user._id }, { $inc: { pendingReservedQuestions: -reservedQuestions } });
+    }
+    throw err;
+  }
 
   return { quiz, questions };
 }
@@ -231,6 +271,13 @@ export async function getActiveQuiz(user) {
 export async function saveAnswer(user, quizId, { questionId, selectedOptionId, timeSpentMs }) {
   const quiz = await getQuizForUser(user, quizId);
   if (quiz.status !== 'in_progress') throw ApiError.badRequest('Iki kizamini cyarangiye', 'QUIZ_SUBMITTED');
+  // Server-side timer enforcement: no answers may be recorded after expiry.
+  if (quiz.expiresAt && quiz.expiresAt < new Date()) {
+    quiz.status = 'expired';
+    quiz.submittedAt = new Date();
+    await quiz.save();
+    throw ApiError.badRequest('Igihe cy’iki kizamini cyarangiye', 'QUIZ_EXPIRED');
+  }
 
   const question = await Question.findById(questionId);
   if (!question) throw ApiError.notFound('Ikibazo ntikibonetso', 'QUESTION_NOT_FOUND');
@@ -255,9 +302,37 @@ export async function saveAnswer(user, quizId, { questionId, selectedOptionId, t
   };
 }
 
-export async function submitQuiz(user, quizId, { selections = {}, durationSec } = {}) {
-  const quiz = await getQuizForUser(user, quizId);
-  if (quiz.status === 'submitted') throw ApiError.conflict('Iki kizamini cyatanzwe', 'QUIZ_ALREADY_SUBMITTED');
+export async function submitQuiz(user, quizId, { selections = {} } = {}) {
+  // Atomic claim: only one submit per quiz can win. The winner flips the quiz
+  // out of `in_progress`; a concurrent double-submit loses the race here.
+  const now = new Date();
+  const claimed = await Quiz.findOneAndUpdate(
+    { _id: quizId, user: user._id, status: 'in_progress' },
+    { $set: { status: 'submitted', submittedAt: now } },
+    { new: true },
+  );
+
+  let quiz = claimed;
+  if (!quiz) {
+    const existing = await getQuizForUser(user, quizId);
+    if (existing.status === 'submitted') {
+      throw ApiError.conflict('Iki kizamini cyatanzwe', 'QUIZ_ALREADY_SUBMITTED');
+    }
+    // `expired` quizzes may still be submitted so saved answers get graded
+    // (auto-submit after tab close); new selections are ignored for them.
+    if (existing.status !== 'expired') {
+      throw ApiError.badRequest('Iki kizamini ntikiri po', 'QUIZ_NOT_ACTIVE');
+    }
+    quiz = await Quiz.findOneAndUpdate(
+      { _id: quizId, user: user._id, status: 'expired' },
+      { $set: { status: 'submitted', submittedAt: now } },
+      { new: true },
+    );
+    if (!quiz) throw ApiError.conflict('Iki kizamini cyatanzwe', 'QUIZ_ALREADY_SUBMITTED');
+  }
+
+  // Server-side timer: past the deadline only answers already saved count.
+  const pastDeadline = Boolean(quiz.expiresAt && quiz.expiresAt < now);
 
   const questionIds = quiz.questions.map((q) => q.question);
   const questions = await Question.find({ _id: { $in: questionIds } }).populate('category', 'name slug color');
@@ -267,13 +342,16 @@ export async function submitQuiz(user, quizId, { selections = {}, durationSec } 
     .map((entry) => byId.get(String(entry.question)))
     .filter(Boolean);
 
-  // Merge already-saved answers with the submitted selections (submit wins).
+  // Merge already-saved answers with the submitted selections (submit wins),
+  // but ignore fresh selections once the time limit has passed.
   const finalSelections = {};
   for (const entry of quiz.answers) {
     if (entry.selectedOptionId) finalSelections[String(entry.question)] = entry.selectedOptionId;
   }
-  for (const [qid, optionId] of Object.entries(selections || {})) {
-    if (optionId) finalSelections[String(qid)] = optionId;
+  if (!pastDeadline) {
+    for (const [qid, optionId] of Object.entries(selections || {})) {
+      if (optionId) finalSelections[String(qid)] = optionId;
+    }
   }
 
   const settings = await Settings.getSettings();
@@ -305,12 +383,24 @@ export async function submitQuiz(user, quizId, { selections = {}, durationSec } 
     byCategory: result.byCategory,
   };
   quiz.status = 'submitted';
-  quiz.submittedAt = new Date();
-  quiz.durationSec = Number(durationSec) || Math.round((Date.now() - quiz.startedAt.getTime()) / 1000);
+  quiz.submittedAt = now;
+  // durationSec is server-computed and clamped to the time limit - the client
+  // value is never trusted.
+  const elapsed = Math.max(0, Math.round((now.getTime() - quiz.startedAt.getTime()) / 1000));
+  quiz.durationSec = quiz.timeLimitSec ? Math.min(elapsed, quiz.timeLimitSec) : elapsed;
   await quiz.save();
 
   await persistUserAnswers(user, quiz, ordered, finalSelections);
   await updateUserStats(user, result, quiz);
+
+  // Release the free-question reservation taken at quiz start (if any).
+  const reserved = Number(quiz.config?.reservedQuestions) || 0;
+  if (reserved > 0) {
+    await Entitlement.updateOne(
+      { user: user._id },
+      { $inc: { pendingReservedQuestions: -reserved } },
+    );
+  }
 
   // Consume free allowance for learners without an active subscription. Study
   // sessions count towards distinct questions but not the practice-attempt cap.
@@ -425,8 +515,19 @@ export async function deleteQuiz(user, quizId) {
 }
 
 export async function expireStaleQuizzes(userId) {
+  const now = new Date();
+  // Release any free-question reservations held by quizzes that timed out.
+  const stale = await Quiz.find({
+    user: userId,
+    status: 'in_progress',
+    expiresAt: { $lt: now },
+  }).select('config.reservedQuestions').lean();
+  const totalReserved = stale.reduce((sum, q) => sum + (Number(q.config?.reservedQuestions) || 0), 0);
+  if (totalReserved > 0) {
+    await Entitlement.updateOne({ user: userId }, { $inc: { pendingReservedQuestions: -totalReserved } });
+  }
   return Quiz.updateMany(
-    { user: userId, status: 'in_progress', expiresAt: { $lt: new Date() } },
+    { user: userId, status: 'in_progress', expiresAt: { $lt: now } },
     { status: 'expired' },
   );
 }

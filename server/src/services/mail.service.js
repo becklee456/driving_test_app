@@ -10,10 +10,10 @@ import { OutboxMessage } from '../models/index.js';
  * To plug in a real provider, implement `deliver()` below (e.g. using
  * nodemailer) and set MAIL_TRANSPORT accordingly.
  */
-async function deliver({ to, subject, text }) {
+async function deliver({ to, subject }) {
   if (config.mail.transport === 'console') {
+    // Never log the body: it contains OTP/reset codes.
     logger.info(`[mail] -> ${to} | ${subject}`);
-    logger.debug(text);
     return { delivered: true };
   }
   // "outbox": persist for later inspection by admins / dev tooling.

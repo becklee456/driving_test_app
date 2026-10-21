@@ -1,6 +1,21 @@
 import rateLimit from 'express-rate-limit';
 import config from '../config/env.js';
 
+/**
+ * IPv6-safe client IP key. Normalizes IPv4-mapped IPv6 addresses
+ * (::ffff:1.2.3.4) and truncates IPv6 addresses to their /64 subnet so a
+ * single client rotating interface ids cannot bypass per-IP limits.
+ */
+export function ipKeyGenerator(ip) {
+  if (!ip) return 'unknown';
+  const normalized = ip.toLowerCase().replace('::ffff:', '');
+  if (normalized.includes(':')) {
+    const groups = normalized.split(':');
+    return `${groups.slice(0, 4).join(':')}::/64`;
+  }
+  return normalized;
+}
+
 const baseOptions = {
   standardHeaders: 'draft-7',
   legacyHeaders: false,
@@ -44,11 +59,16 @@ export const authLimiter = makeLimiter({
   message: 'Kwinjira cyangwa kwiyandikisha byageragejwe kenshi. Tegereza gato.',
 });
 
-/** Login attempts keyed by ip + email so one account cannot be brute-forced. */
+/**
+ * Login attempts keyed by ip + email so one account cannot be brute-forced.
+ * Successful logins are not counted (skipSuccessfulRequests), and the IP part
+ * is normalized via the library's ipv6-safe helper.
+ */
 export const loginLimiter = makeLimiter({
   windowMs: config.rateLimit.authWindowMs,
   max: config.security.maxLoginAttempts * 3,
-  keyGenerator: (req) => `${req.ip}:${String(req.body?.email || '').toLowerCase()}`,
+  skipSuccessfulRequests: true,
+  keyGenerator: (req) => `${ipKeyGenerator(req.ip)}:${String(req.body?.email || '').toLowerCase()}`,
   message: 'Kwinjira byageragejwe kenshi kuri iyi konti. Tegereza gato.',
 });
 
@@ -63,7 +83,7 @@ export const writeLimiter = makeLimiter({
 export const otpLimiter = makeLimiter({
   windowMs: 15 * 60 * 1000,
   max: 8,
-  keyGenerator: (req) => `${req.ip}:${String(req.body?.email || req.user?.email || '').toLowerCase()}`,
+  keyGenerator: (req) => `${ipKeyGenerator(req.ip)}:${String(req.body?.email || req.user?.email || '').toLowerCase()}`,
   message: 'Code yoherejwe kenshi. Tegereza gato.',
 });
 

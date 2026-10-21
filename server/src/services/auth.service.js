@@ -65,7 +65,8 @@ export async function verifyEmail({ email, otp }) {
   const user = await User.findOne({ email: String(email).toLowerCase() }).select(
     '+verification.emailOtpHash +verification.emailOtpExpiresAt +verification.emailOtpAttempts',
   );
-  if (!user) throw ApiError.notFound('Nta konti ibonetse', 'USER_NOT_FOUND');
+  // Same generic error whether the account exists or not (no enumeration).
+  if (!user) throw ApiError.badRequest('Kode ntariyo', 'OTP_INVALID');
   if (user.emailVerified) return { user, alreadyVerified: true };
 
   const v = user.verification;
@@ -96,8 +97,9 @@ export async function verifyEmail({ email, otp }) {
 
 export async function resendVerification(email) {
   const user = await User.findOne({ email: String(email).toLowerCase() });
-  if (!user) throw ApiError.notFound('Nta konti ibonetse', 'USER_NOT_FOUND');
-  if (user.emailVerified) throw ApiError.badRequest('Email yawe isanzwe yemejwe', 'ALREADY_VERIFIED');
+  // Always return success: never reveal whether the account exists or is
+  // already verified (anti-enumeration).
+  if (!user || user.emailVerified) return { sent: true, devOtp: undefined };
 
   const last = user.verification.emailOtpSentAt;
   if (last && Date.now() - last.getTime() < 60000) {

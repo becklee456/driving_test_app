@@ -32,7 +32,6 @@ export async function submitPayment(req, res) {
       payerPhone: req.body.payerPhone,
       transactionReference: req.body.transactionReference,
       paymentMessage: req.body.paymentMessage,
-      noProof: req.body.noProof === true || req.body.noProof === 'true',
     },
     req.file,
   );

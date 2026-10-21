@@ -45,7 +45,9 @@ export function errorHandler(err, req, res, _next) {
       message: error.expose ? error.message : 'Habaye ikibazo kuri seriveri. Gerageza nyuma.',
     },
   };
-  if (error.details) payload.error.details = error.details;
+  // Only expose structured details for intentional (exposed) errors - never
+  // for wrapped internals that may embed stack/context information.
+  if (error.details && error.expose) payload.error.details = error.details;
   if (config.isDevelopment && !error.expose) payload.error.debug = err?.message;
 
   res.status(error.status || 500).json(payload);

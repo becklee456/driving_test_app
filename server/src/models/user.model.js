@@ -151,12 +151,34 @@ userSchema.methods.comparePassword = function comparePassword(plain) {
 };
 
 userSchema.methods.registerFailedLogin = async function registerFailedLogin() {
-  this.loginSecurity.failedAttempts += 1;
-  if (this.loginSecurity.failedAttempts >= config.security.maxLoginAttempts) {
-    this.loginSecurity.lockedUntil = new Date(Date.now() + config.security.lockoutMinutes * 60000);
-    this.loginSecurity.failedAttempts = 0;
+  const max = config.security.maxLoginAttempts;
+  // Atomic guarded increment: concurrent failed logins cannot overshoot the
+  // threshold or lose each other's counts (read-modify-write would race).
+  const doc = await this.constructor.findOneAndUpdate(
+    {
+      _id: this._id,
+      $or: [
+        { 'loginSecurity.lockedUntil': null },
+        { 'loginSecurity.lockedUntil': { $exists: false } },
+        { 'loginSecurity.lockedUntil': { $lte: new Date() } },
+      ],
+    },
+    { $inc: { 'loginSecurity.failedAttempts': 1 } },
+    { new: true },
+  );
+  if (!doc) return; // currently locked - failed attempts during lockout are ignored
+  if (doc.loginSecurity.failedAttempts >= max) {
+    await this.constructor.updateOne(
+      { _id: this._id },
+      {
+        $set: {
+          'loginSecurity.lockedUntil': new Date(Date.now() + config.security.lockoutMinutes * 60000),
+          'loginSecurity.failedAttempts': 0,
+        },
+      },
+    );
   }
-  await this.save();
+  this.loginSecurity = doc.loginSecurity;
 };
 
 userSchema.methods.registerSuccessfulLogin = async function registerSuccessfulLogin(ip) {

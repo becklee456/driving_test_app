@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import mongoose from 'mongoose';
 import { getApp, authHeader } from './helpers/app.js';
-import { createCategory, createQuestions, createUser, createPlan, ensureSettings, grantPremium } from './helpers/fixtures.js';
+import { createCategory, createQuestions, createUser, createPlan, ensureSettings, grantPremium, fakePngBuffer } from './helpers/fixtures.js';
 import { ROLES } from '../src/constants/permissions.js';
 import { getAccessState } from '../src/services/entitlement.service.js';
 import { PaymentTransaction } from '../src/models/index.js';
@@ -16,7 +16,7 @@ async function submitPayment(user, plan) {
     .field('planId', String(plan._id))
     .field('payerName', 'Jane Doe')
     .field('payerPhone', '0781234567')
-    .attach('proof', Buffer.from('fake-image-bytes'), { filename: 'proof.png', contentType: 'image/png' });
+    .attach('proof', fakePngBuffer(), { filename: 'proof.png', contentType: 'image/png' });
 }
 
 describe('admin billing API', () => {

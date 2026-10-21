@@ -37,6 +37,8 @@ function extractToken(req) {
 
 /**
  * Populates req.user when a valid access token is present. Never throws.
+ * Enforces the same tokenVersion check as `authenticate` so password changes
+ * immediately invalidate optional-auth sessions too.
  */
 export async function authenticateOptional(req, _res, next) {
   try {
@@ -47,12 +49,27 @@ export async function authenticateOptional(req, _res, next) {
     const user = await User.findById(payload.sub);
     if (!user || user.status === 'suspended' || user.status === 'deactivated') return next();
     if (user.loginSecurity?.lockedUntil && user.loginSecurity.lockedUntil > new Date()) return next();
+    if (payload.tokenVersion !== (user.loginSecurity?.passwordChangedAt?.getTime() || 0)) return next();
     req.user = user;
     req.auth = payload;
     next();
   } catch (err) {
     next(err);
   }
+}
+
+/**
+ * CSRF guard for cookie-authenticated endpoints that sit outside `authenticate`
+ * (e.g. /auth/refresh, /auth/logout). Rejects cookie-based state-changing
+ * requests that do not carry the custom CSRF header.
+ */
+export function requireCsrfHeader(req, _res, next) {
+  const usesCookie = !req.headers.authorization && Boolean(req.cookies?.[ACCESS_COOKIE] || req.cookies?.[REFRESH_COOKIE]);
+  const isStateChanging = !['GET', 'HEAD', 'OPTIONS'].includes(req.method);
+  if (usesCookie && isStateChanging && req.headers[CSRF_HEADER] !== '1') {
+    return next(ApiError.forbidden('Ubusabe budafite umutekano (CSRF)', 'CSRF_REQUIRED'));
+  }
+  return next();
 }
 
 /**

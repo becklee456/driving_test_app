@@ -10,7 +10,7 @@ import * as paymentController from '../controllers/payment.controller.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
 import { requireStaff, requirePermission } from '../middleware/permissions.js';
-import { PERMISSIONS } from '../constants/permissions.js';
+import { PERMISSIONS, ALL_PERMISSIONS } from '../constants/permissions.js';
 import { writeLimiter } from '../middleware/rate-limit.js';
 import { asyncHandler } from '../utils/async-handler.js';
 
@@ -192,14 +192,32 @@ router.patch(
   validate({
     body: z.object({
       role: z.enum(['USER', 'EDITOR', 'MODERATOR', 'ADMIN', 'SUPER_ADMIN']),
-      permissions: z.array(z.string()).optional(),
+      permissions: z.array(z.enum(ALL_PERMISSIONS)).optional(),
     }),
   }),
-  asyncHandler(userController.updateUser),
+  asyncHandler(userController.updateUserRole),
 );
-router.post('/users/:id/suspend', requirePermission(PERMISSIONS.USERS_SUSPEND), asyncHandler(userController.suspendUser));
-router.post('/users/:id/activate', requirePermission(PERMISSIONS.USERS_MANAGE), asyncHandler(userController.activateUser));
-router.post('/users/:id/reset-progress', requirePermission(PERMISSIONS.USERS_MANAGE), asyncHandler(userController.resetProgress));
+router.post(
+  '/users/:id/suspend',
+  requirePermission(PERMISSIONS.USERS_SUSPEND),
+  writeLimiter,
+  validate({ body: z.object({ notes: z.string().max(2000).optional() }) }),
+  asyncHandler(userController.suspendUser),
+);
+router.post(
+  '/users/:id/activate',
+  requirePermission(PERMISSIONS.USERS_MANAGE),
+  writeLimiter,
+  validate({ body: z.object({ notes: z.string().max(2000).optional() }) }),
+  asyncHandler(userController.activateUser),
+);
+router.post(
+  '/users/:id/reset-progress',
+  requirePermission(PERMISSIONS.USERS_MANAGE),
+  writeLimiter,
+  validate({ body: z.object({}).optional() }),
+  asyncHandler(userController.resetProgress),
+);
 router.delete('/users/:id', requirePermission(PERMISSIONS.USERS_MANAGE), asyncHandler(userController.deleteUser));
 
 /* Settings */

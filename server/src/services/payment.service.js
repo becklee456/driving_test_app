@@ -9,20 +9,25 @@ import { effectivePermissions, PERMISSIONS } from '../constants/permissions.js';
 import ApiError from '../utils/api-error.js';
 
 const DUPLICATE_COOLDOWN_MS = 60 * 1000; // block accidental double submit within 1 min
+const STALE_RECLAIM_MS = 10 * 60 * 1000; // re-claim an UNDER_REVIEW left by a dead admin session
 
 function verificationWindowMs(windowHours) {
   return Math.max(1, Number(windowHours) || 3) * 60 * 60 * 1000;
 }
 
 /**
- * Approves atomically: only a transaction still in a reviewable state can be
- * claimed. This makes concurrent/duplicate approvals impossible — the loser of
- * the race gets a 409 and no second subscription is ever created.
+ * Exclusive claim: only a PENDING_REVIEW transaction can be claimed, so two
+ * reviewers can never hold the same transaction at once. An UNDER_REVIEW row
+ * older than STALE_RECLAIM_MS (abandoned session) may be reclaimed.
  */
-async function claimForReview(txnId, reviewerId) {
+async function claimForReview(txnId, reviewerId, now = new Date()) {
+  const staleBefore = new Date(now.getTime() - STALE_RECLAIM_MS);
   return PaymentTransaction.findOneAndUpdate(
-    { _id: txnId, status: { $in: ['PENDING_REVIEW', 'UNDER_REVIEW'] } },
-    { $set: { status: 'UNDER_REVIEW', reviewedBy: reviewerId } },
+    {
+      _id: txnId,
+      $or: [{ status: 'PENDING_REVIEW' }, { status: 'UNDER_REVIEW', reviewedAt: { $lte: staleBefore } }],
+    },
+    { $set: { status: 'UNDER_REVIEW', reviewedAt: now, reviewedBy: reviewerId } },
     { new: true },
   );
 }
@@ -57,44 +62,53 @@ export async function submitPayment(user, input, file) {
     );
   }
 
-  const allowNoProof = Boolean(input.noProof);
-  if (!allowNoProof && !file?.buffer?.length) {
+  // A proof screenshot is mandatory: there is no bypass flag anymore.
+  if (!file?.buffer?.length) {
     throw ApiError.badRequest('Ifoto y’ubwishyu irakenewe', 'PROOF_REQUIRED');
   }
 
-  let proof = { proofImageUrl: null, proofImagePublicId: null, metadata: null };
-  if (file?.buffer?.length) {
-    proof = await storeProof(file.buffer, {
-      mimeType: file.mimetype,
-      originalFilename: file.originalname,
-    });
-  }
+  const proof = await storeProof(file.buffer, {
+    mimeType: file.mimetype,
+    originalFilename: file.originalname,
+  });
 
   const now = new Date();
   const expiresAt = new Date(now.getTime() + verificationWindowMs(paymentCfg.verificationWindowHours));
 
-  const txn = await PaymentTransaction.create({
-    user: user._id,
-    plan: plan._id,
-    planCode: plan.code,
-    planName: plan.name,
-    amount: plan.price,
-    currency: plan.currency || paymentCfg.currency || 'RWF',
-    durationDays: plan.isLifetime ? null : plan.durationDays,
-    isLifetime: plan.isLifetime,
-    payerName: String(input.payerName || '').trim(),
-    payerPhone,
-    recipientPhone: paymentCfg.recipientPhone || '0783632506',
-    recipientName: paymentCfg.recipientName || 'Gisubizo Becken',
-    transactionReference: input.transactionReference ? String(input.transactionReference).trim() : null,
-    paymentMessage: input.paymentMessage ? String(input.paymentMessage).trim() : null,
-    proofImageUrl: proof.proofImageUrl,
-    proofImagePublicId: proof.proofImagePublicId,
-    proofMeta: proof.metadata || {},
-    status: 'PENDING_REVIEW',
-    submittedAt: now,
-    expiresAt,
-  });
+  let txn;
+  try {
+    txn = await PaymentTransaction.create({
+      user: user._id,
+      plan: plan._id,
+      planCode: plan.code,
+      planName: plan.name,
+      amount: plan.price,
+      currency: plan.currency || paymentCfg.currency || 'RWF',
+      durationDays: plan.isLifetime ? null : plan.durationDays,
+      isLifetime: plan.isLifetime,
+      payerName: String(input.payerName || '').trim(),
+      payerPhone,
+      recipientPhone: paymentCfg.recipientPhone || '0783632506',
+      recipientName: paymentCfg.recipientName || 'Gisubizo Becken',
+      transactionReference: input.transactionReference ? String(input.transactionReference).trim() : null,
+      paymentMessage: input.paymentMessage ? String(input.paymentMessage).trim() : null,
+      proofImageUrl: proof.proofImageUrl,
+      proofImagePublicId: proof.proofImagePublicId,
+      proofMeta: proof.metadata || {},
+      status: 'PENDING_REVIEW',
+      submittedAt: now,
+      expiresAt,
+    });
+  } catch (err) {
+    // Unique index on transactionReference: this MoMo reference was already used.
+    if (err?.code === 11000) {
+      throw ApiError.conflict(
+        'Iyi nimero y’ubwishyu isanzweho. Koresha iyindi cyangwa ubufasha bwacu.',
+        'PAYMENT_DUPLICATE_REF',
+      );
+    }
+    throw err;
+  }
 
   await notify(user, {
     type: 'system',
@@ -216,19 +230,42 @@ export async function getPaymentForAdmin(txnId) {
 }
 
 /**
- * Approves a payment and activates the subscription. Idempotent + atomic:
- *  - claims the transaction with a guarded findOneAndUpdate
- *  - creates the subscription once (unique index on `payment`)
- *  - if a subscription already exists for this payment, returns it untouched
+ * Approves a payment and activates the subscription. Race-safe ordering:
+ *  1. claim the transaction (exclusive, guarded findOneAndUpdate)
+ *  2. flip UNDER_REVIEW -> APPROVED *before* creating the subscription; if the
+ *     flip fails a concurrent deny already won and we abort - no subscription
+ *     is ever created for a denied transaction
+ *  3. create the subscription once (unique index on `payment`)
+ *  4. attach the subscription id back to the transaction
+ * Re-approving an already-APPROVED transaction is a no-op (idempotent), and an
+ * APPROVED row whose subscription creation failed earlier gets repaired here.
  */
 export async function approvePayment(admin, txnId, { note } = {}) {
   await expireIfDue(txnId);
   const claimed = await claimForReview(txnId, admin._id);
+
+  let subscription = null;
+
   if (!claimed) {
     const existing = await PaymentTransaction.findById(txnId).lean();
     if (!existing) throw ApiError.notFound('Ubwishyu ntibwabonetse', 'PAYMENT_NOT_FOUND');
     if (existing.status === 'APPROVED') {
-      throw ApiError.conflict('Ubu bwishyu bwemejwe mbere', 'PAYMENT_ALREADY_APPROVED');
+      // Idempotent repair path: approval already happened but the subscription
+      // may be missing if a previous attempt crashed between flip and create.
+      if (existing.subscription) throw ApiError.conflict('Ubu bwishyu bwemejwe mbere', 'PAYMENT_ALREADY_APPROVED');
+      // A freshly-flipped APPROVED row with no subscription yet means a
+      // concurrent approval is still in flight - do not double-process it.
+      const flipStaleBefore = new Date(Date.now() - STALE_RECLAIM_MS);
+      if (existing.reviewedAt && new Date(existing.reviewedAt) > flipStaleBefore) {
+        throw ApiError.conflict('Ubu bwishyu bwemejwe mbere', 'PAYMENT_ALREADY_APPROVED');
+      }
+      subscription = await createSubscriptionForPayment(admin, existing);
+      const repaired = await PaymentTransaction.findOneAndUpdate(
+        { _id: existing._id, status: 'APPROVED', subscription: null },
+        { $set: { subscription: subscription._id } },
+        { new: true },
+      );
+      return { transaction: repaired || existing, subscription };
     }
     if (existing.status === 'DENIED') {
       throw ApiError.conflict('Ubu bwishyu bwanze mbere', 'PAYMENT_ALREADY_DENIED');
@@ -239,70 +276,82 @@ export async function approvePayment(admin, txnId, { note } = {}) {
     throw ApiError.conflict('Ubu bwishyu ntibwemewe ubu', 'PAYMENT_NOT_REVIEWABLE');
   }
 
-  // Reuse an existing subscription for this payment when present (idempotency).
-  let subscription = await Subscription.findOne({ payment: claimed._id });
-  if (!subscription) {
-    const now = new Date();
-    // Snapshot the plan's entitlements so later plan edits never affect this
-    // already-purchased subscription.
-    const planDoc = await Plan.findById(claimed.plan).lean();
-    const expiresAt = claimed.isLifetime
-      ? null
-      : new Date(now.getTime() + (claimed.durationDays || 0) * 24 * 60 * 60 * 1000);
-    try {
-      subscription = await Subscription.create({
-        user: claimed.user,
-        plan: claimed.plan,
-        planCode: claimed.planCode,
-        planName: claimed.planName,
-        payment: claimed._id,
-        amount: claimed.amount,
-        currency: claimed.currency,
-        isLifetime: claimed.isLifetime,
-        durationDays: claimed.isLifetime ? null : claimed.durationDays,
-        entitlements: planDoc?.entitlements || undefined,
-        status: 'active',
-        activatedAt: now,
-        expiresAt,
-        approvedBy: admin._id,
-      });
-    } catch (err) {
-      // Unique index race: another request created it first. Reuse it.
-      if (err?.code === 11000) {
-        subscription = await Subscription.findOne({ payment: claimed._id });
-      } else {
-        throw err;
-      }
-    }
-  }
-
-  const updated = await PaymentTransaction.findOneAndUpdate(
+  // Flip to the terminal APPROVED state first. If this matches nothing, a
+  // concurrent deny flipped the row between our claim and this flip - abort
+  // without creating a subscription.
+  const flipped = await PaymentTransaction.findOneAndUpdate(
     { _id: claimed._id, status: 'UNDER_REVIEW' },
     {
       $set: {
         status: 'APPROVED',
         reviewedAt: new Date(),
         reviewedBy: admin._id,
-        subscription: subscription?._id || null,
         denialReason: note ? String(note).slice(0, 300) : null,
       },
     },
     { new: true },
   );
-
-  if (updated) {
-    await notify(
-      { _id: claimed.user },
-      {
-        type: 'system',
-        title: 'Ubwishyu bwemejwe',
-        body: `${claimed.planName} yatangiye! Ubu ufite ubwenge bwose.`,
-        data: { paymentId: String(claimed._id), subscriptionId: String(subscription?._id || '') },
-      },
-    ).catch(() => {});
+  if (!flipped) {
+    throw ApiError.conflict('Ubu bwishyu bwangutse mu gihe cyo gupima', 'PAYMENT_REVIEW_RACE');
   }
 
-  return { transaction: updated || claimed, subscription };
+  subscription = await createSubscriptionForPayment(admin, claimed);
+
+  const updated = await PaymentTransaction.findOneAndUpdate(
+    { _id: claimed._id, status: 'APPROVED' },
+    { $set: { subscription: subscription._id } },
+    { new: true },
+  );
+
+  await notify(
+    { _id: claimed.user },
+    {
+      type: 'system',
+      title: 'Ubwishyu bwemejwe',
+      body: `${claimed.planName} yatangiye! Ubu ufite ubwenge bwose.`,
+      data: { paymentId: String(claimed._id), subscriptionId: String(subscription._id) },
+    },
+  ).catch(() => {});
+
+  return { transaction: updated || flipped, subscription };
+}
+
+/** Creates (or reuses) the subscription for an approved transaction. */
+async function createSubscriptionForPayment(admin, txn) {
+  let subscription = await Subscription.findOne({ payment: txn._id });
+  if (subscription) return subscription;
+
+  const now = new Date();
+  // Snapshot the plan's entitlements so later plan edits never affect this
+  // already-purchased subscription.
+  const planDoc = await Plan.findById(txn.plan).lean();
+  const expiresAt = txn.isLifetime ? null : new Date(now.getTime() + (txn.durationDays || 0) * 24 * 60 * 60 * 1000);
+  try {
+    subscription = await Subscription.create({
+      user: txn.user,
+      plan: txn.plan,
+      planCode: txn.planCode,
+      planName: txn.planName,
+      payment: txn._id,
+      amount: txn.amount,
+      currency: txn.currency,
+      isLifetime: txn.isLifetime,
+      durationDays: txn.isLifetime ? null : txn.durationDays,
+      entitlements: planDoc?.entitlements || undefined,
+      status: 'active',
+      activatedAt: now,
+      expiresAt,
+      approvedBy: admin._id,
+    });
+  } catch (err) {
+    // Unique index race: another request created it first. Reuse it.
+    if (err?.code === 11000) {
+      subscription = await Subscription.findOne({ payment: txn._id });
+      if (subscription) return subscription;
+    }
+    throw err;
+  }
+  return subscription;
 }
 
 /** Denies a pending payment with an optional reason. Immutable afterwards. */

@@ -16,7 +16,6 @@ const startSchema = z.object({
   categories: z.array(z.string()).max(20).optional(),
   difficulty: z.enum(['all', 'easy', 'medium', 'hard']).optional(),
   mode: z.enum(['random', 'sequential', 'incorrect', 'bookmarked']).optional(),
-  feedbackMode: z.enum(['immediate', 'end']).optional(),
 });
 
 const answerSchema = z.object({
@@ -27,7 +26,6 @@ const answerSchema = z.object({
 
 const submitSchema = z.object({
   selections: z.record(z.string(), z.string().nullable()).optional(),
-  durationSec: z.coerce.number().int().min(0).max(86_400).optional(),
 });
 
 router.post('/', writeLimiter, validate({ body: startSchema }), asyncHandler(quizController.startQuiz));

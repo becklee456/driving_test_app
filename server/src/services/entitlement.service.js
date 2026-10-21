@@ -211,27 +211,29 @@ export async function assertDailyQuestionQuota(entitlements, userId, { needed = 
  * Records that a learner has consumed free questions. Called after a quiz is
  * submitted. The distinct-question set makes repeat attempts on the same
  * questions free of additional charge, and makes the count immune to resets.
+ * Implemented as a pipeline update so concurrent submissions cannot lose
+ * each other's ids (read-modify-write would race).
  */
 export async function consumeFreeQuestions(userId, questionIds = []) {
   if (!questionIds.length) return null;
-  const ent = await getEntitlement(userId);
-  const set = new Set(ent.answeredQuestionIds.map((id) => String(id)));
-  const before = set.size;
-  for (const id of questionIds) set.add(String(id));
-  if (set.size === before) return ent;
-
-  ent.answeredQuestionIds = [...set];
-  ent.freeQuestionsUsed = set.size;
-  await ent.save();
-  return ent;
+  const objectIds = [...new Set(questionIds.map((id) => new mongoose.Types.ObjectId(String(id))))];
+  return Entitlement.findOneAndUpdate(
+    { user: userId },
+    [
+      { $set: { answeredQuestionIds: { $setUnion: ['$answeredQuestionIds', objectIds] } } },
+      { $set: { freeQuestionsUsed: { $size: '$answeredQuestionIds' }, updatedAt: new Date() } },
+    ],
+    { new: true, upsert: true },
+  );
 }
 
 /** Records that a free learner used one of their free practice attempts. */
 export async function consumeFreePracticeAttempt(userId) {
-  const ent = await getEntitlement(userId);
-  ent.freePracticeAttemptsUsed += 1;
-  await ent.save();
-  return ent;
+  return Entitlement.findOneAndUpdate(
+    { user: userId },
+    { $inc: { freePracticeAttemptsUsed: 1 }, $set: { updatedAt: new Date() } },
+    { new: true, upsert: true },
+  );
 }
 
 /** Resets a learner's entitlement (admin action / progress reset). */
@@ -243,6 +245,7 @@ export async function resetEntitlement(userId) {
         freeQuestionsUsed: 0,
         freePracticeAttemptsUsed: 0,
         answeredQuestionIds: [],
+        pendingReservedQuestions: 0,
       },
     },
     { upsert: true },

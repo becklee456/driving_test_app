@@ -99,6 +99,7 @@ export default function AdminUsers() {
                     <div className="flex items-center gap-1">
                       <Select
                         value={u.role}
+                        disabled={self}
                         onChange={(e) => changeRole.mutateAsync({ id: u.id || u._id, role: e.target.value }).then(() => toast.success(t('common.updated'))).catch((err) => toast.error(err.message))}
                         className="w-32"
                         aria-label={t('admin.change_role')}

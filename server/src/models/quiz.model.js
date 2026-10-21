@@ -40,6 +40,7 @@ const quizSchema = new Schema(
       mode: { type: String, enum: ['random', 'sequential', 'incorrect', 'bookmarked'], default: 'random' },
       feedbackMode: { type: String, enum: ['immediate', 'end'], default: 'immediate' },
       passingScore: { type: Number, default: null },
+      reservedQuestions: { type: Number, default: 0, min: 0 },
     },
 
     questions: { type: [quizQuestionSchema], default: [] },

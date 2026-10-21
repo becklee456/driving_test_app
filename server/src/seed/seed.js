@@ -78,6 +78,14 @@ async function seedPlans() {
   logger.info(`Plans: ${PLANS.length} (${created} bishya)`);
 }
 
+const KNOWN_DEFAULT_PASSWORDS = new Set([
+  'Admin@12345',
+  'Editor@12345',
+  'Mod@12345',
+  'Student@12345',
+  'Manager@12345',
+]);
+
 async function seedUsers() {
   const { seed } = config;
   const accounts = [
@@ -87,6 +95,17 @@ async function seedUsers() {
     { fullName: 'Umugenzuzi', email: seed.moderatorEmail, password: seed.moderatorPassword, role: ROLES.MODERATOR },
     { fullName: 'Umunyeshuri', email: seed.studentEmail, password: seed.studentPassword, role: ROLES.USER },
   ];
+
+  // Never create well-known credentials in production.
+  if (config.isProduction) {
+    const usingDefaults = accounts.filter((a) => KNOWN_DEFAULT_PASSWORDS.has(a.password));
+    if (usingDefaults.length) {
+      throw new Error(
+        'Refusing to seed default credentials in production. Set strong SEED_*_PASSWORD ' +
+          `env vars for: ${usingDefaults.map((a) => a.email).join(', ')}`,
+      );
+    }
+  }
 
   const created = [];
   for (const account of accounts) {

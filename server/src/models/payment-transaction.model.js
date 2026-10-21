@@ -71,7 +71,11 @@ paymentTransactionSchema.index({ user: 1, status: 1, submittedAt: -1 });
 paymentTransactionSchema.index({ user: 1, createdAt: -1 });
 paymentTransactionSchema.index({ status: 1, submittedAt: -1 });
 paymentTransactionSchema.index({ status: 1, expiresAt: 1 });
-paymentTransactionSchema.index({ transactionReference: 1 });
+// A MoMo transaction reference may only ever be used once (nulls excluded).
+paymentTransactionSchema.index(
+  { transactionReference: 1 },
+  { unique: true, partialFilterExpression: { transactionReference: { $type: 'string' } } },
+);
 
 paymentTransactionSchema.virtual('isExpired').get(function isExpired() {
   return this.status === 'PENDING_REVIEW' && this.expiresAt && this.expiresAt.getTime() < Date.now();

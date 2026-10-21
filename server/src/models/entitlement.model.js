@@ -20,6 +20,8 @@ const entitlementSchema = new Schema(
     freeQuestionsAllowed: { type: Number, default: 40, min: 0 },
     freeQuestionsUsed: { type: Number, default: 0, min: 0 },
     answeredQuestionIds: { type: [Schema.Types.ObjectId], default: [] },
+    // Questions held by in-progress quizzes; released on submit or expiry.
+    pendingReservedQuestions: { type: Number, default: 0, min: 0 },
 
     freePracticeAttemptsAllowed: { type: Number, default: 1, min: 0 },
     freePracticeAttemptsUsed: { type: Number, default: 0, min: 0 },

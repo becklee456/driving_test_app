@@ -251,7 +251,7 @@ export async function getQuestion(id, { staff = false } = {}) {
   const question = await Question.findById(id).populate('category', 'name slug color icon').lean();
   if (!question) throw ApiError.notFound('Ikibazo ntikibonetse', 'QUESTION_NOT_FOUND');
   if (!staff && question.status !== 'active') throw ApiError.notFound('Ikibazo ntikibonetse', 'QUESTION_NOT_FOUND');
-  return toPublicQuestion(question, { includeCorrect: true });
+  return toPublicQuestion(question, { includeCorrect: staff });
 }
 
 export function toPublicQuestion(q, { includeCorrect = false } = {}) {

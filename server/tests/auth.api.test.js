@@ -22,7 +22,7 @@ describe('auth API', () => {
   it('registers a user and signs them in', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ fullName: 'Uwimana Jean', email: 'new@test.rw', password });
+      .send({ fullName: 'Uwimana Jean', email: 'new@test.rw', password, confirmPassword: password });
     expect(res.status).toBe(201);
     expect(res.body.data.user.email).toBe('new@test.rw');
     expect(res.body.data.user.passwordHash).toBeUndefined();
@@ -33,9 +33,25 @@ describe('auth API', () => {
   it('rejects a duplicate email', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ fullName: 'Dupe', email: user.email, password });
+      .send({ fullName: 'Dupe', email: user.email, password, confirmPassword: password });
     expect(res.status).toBe(409);
     expect(res.body.error.code).toBe('EMAIL_TAKEN');
+  });
+
+  it('rejects a mismatched confirmPassword', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({ fullName: 'Mismatch', email: 'mismatch@test.rw', password, confirmPassword: 'Different123' });
+    expect(res.status).toBe(422);
+    expect(res.body.error.code).toBe('VALIDATION_ERROR');
+  });
+
+  it('rejects a password equal to the email', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({ fullName: 'Email Pass', email: 'user4@test.rw', password: 'user4@test.rw', confirmPassword: 'user4@test.rw' });
+    expect(res.status).toBe(422);
+    expect(res.body.error.code).toBe('VALIDATION_ERROR');
   });
 
   it('validates the registration payload', async () => {

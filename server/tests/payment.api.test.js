@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import { getApp, authHeader } from './helpers/app.js';
-import { createCategory, createQuestions, createUser, createPlan, ensureSettings, grantPremium } from './helpers/fixtures.js';
+import { createCategory, createQuestions, createUser, createPlan, ensureSettings, grantPremium, fakePngBuffer } from './helpers/fixtures.js';
 import { PaymentTransaction } from '../src/models/index.js';
 
 const app = getApp();
@@ -16,7 +16,7 @@ async function submitProofPayment(user, plan, overrides = {}) {
   if (overrides.transactionReference) req.field('transactionReference', overrides.transactionReference);
   if (overrides.noProof) req.field('noProof', 'true');
   if (overrides.noProof || overrides.withoutProof) return req;
-  return req.attach('proof', Buffer.from('fake-image-bytes'), {
+  return req.attach('proof', fakePngBuffer(), {
     filename: 'proof.png',
     contentType: 'image/png',
   });
@@ -118,10 +118,22 @@ describe('payments API (learner)', () => {
     expect(stranger.body.error.code).toBe('PROOF_FORBIDDEN');
   });
 
-  it('accepts submission without proof when noProof is set', async () => {
+  it('rejects submission even when a noProof flag is set', async () => {
     const res = await submitProofPayment(user, plan, { noProof: true });
-    expect(res.status).toBe(201);
-    expect(res.body.data.payment.proofImagePublicId).toBeNull();
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('PROOF_REQUIRED');
+  });
+
+  it('rejects a proof whose bytes are not a real image', async () => {
+    const res = await request(app)
+      .post('/api/payments')
+      .set('Authorization', authHeader(user))
+      .field('planId', String(plan._id))
+      .field('payerName', 'John Doe')
+      .field('payerPhone', '0781234567')
+      .attach('proof', Buffer.from('definitely-not-an-image'), { filename: 'proof.png', contentType: 'image/png' });
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('INVALID_PROOF_TYPE');
   });
 
   it('exposes access state on /me and payment config on /config', async () => {

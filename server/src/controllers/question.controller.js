@@ -31,7 +31,7 @@ export async function randomQuestion(req, res) {
   const [question] = await Question.aggregate([{ $match: match }, { $sample: { size: 1 } }]);
   if (!question) throw ApiError.notFound('Nta kibazo kibonetse', 'NO_QUESTION');
   const hydrated = await Question.findById(question._id).populate('category', 'name slug color icon');
-  return success(res, { question: questionService.toPublicQuestion(hydrated, { includeCorrect: true }) });
+  return success(res, { question: questionService.toPublicQuestion(hydrated, { includeCorrect: false }) });
 }
 
 /* ------------------------------------------------------------------ *
