@@ -225,6 +225,9 @@ export function useTestimonialMutations() {
     }),
   };
 }
+
+/* Imports */
+export function useImportPreview() {
   return useMutation({
     mutationFn: (payload) => request({ method: 'post', url: '/admin/imports/preview', data: payload }),
   });
