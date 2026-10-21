@@ -35,6 +35,7 @@ export const ADMIN_NAV = [
   { to: '/admin/reports', labelKey: 'admin.reports', icon: 'flag', permission: PERMISSIONS.REPORTS_VIEW },
   { to: '/admin/payments', labelKey: 'admin.payments', icon: 'credit-card', permission: PERMISSIONS.BILLING_MANAGE },
   { to: '/admin/plans', labelKey: 'admin.plans', icon: 'tag', permission: PERMISSIONS.PLANS_MANAGE },
+  { to: '/admin/testimonials', labelKey: 'admin.testimonials', icon: 'users', permission: PERMISSIONS.TESTIMONIALS_VIEW },
   { to: '/admin/imports', labelKey: 'admin.imports', icon: 'upload', permission: PERMISSIONS.QUESTIONS_IMPORT },
   { to: '/admin/analytics', labelKey: 'nav.progress', icon: 'chart', permission: PERMISSIONS.ANALYTICS_VIEW },
   { to: '/admin/audit', labelKey: 'admin.audit', icon: 'shield', permission: PERMISSIONS.AUDIT_VIEW },

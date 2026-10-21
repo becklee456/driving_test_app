@@ -6,6 +6,7 @@ import questionRoutes from './question.routes.js';
 import categoryRoutes from './category.routes.js';
 import adminRoutes from './admin.routes.js';
 import paymentRoutes from './payment.routes.js';
+import testimonialRoutes from './testimonial.routes.js';
 import { loadSettings, maintenanceGuard } from '../middleware/settings.js';
 import config from '../config/env.js';
 import { success } from '../middleware/error.js';
@@ -67,6 +68,7 @@ router.use('/quizzes', quizRoutes);
 router.use('/questions', questionRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/payments', paymentRoutes);
+router.use('/testimonials', testimonialRoutes);
 router.use('/admin', adminRoutes);
 
 export default router;

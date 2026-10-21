@@ -11,6 +11,7 @@ export { StudySession } from './study-session.model.js';
 export { AdminActivity } from './admin-activity.model.js';
 export { RefreshToken } from './refresh-token.model.js';
 export { Settings } from './settings.model.js';
+export { Testimonial } from './testimonial.model.js';
 export { OutboxMessage } from './outbox-message.model.js';
 export { Plan } from './plan.model.js';
 export { PaymentTransaction, PAYMENT_STATUS } from './payment-transaction.model.js';

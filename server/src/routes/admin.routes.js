@@ -7,6 +7,7 @@ import * as userController from '../controllers/user.controller.js';
 import * as importController from '../controllers/import.controller.js';
 import * as reportController from '../controllers/report.controller.js';
 import * as paymentController from '../controllers/payment.controller.js';
+import * as testimonialController from '../controllers/testimonial.controller.js';
 import { validate } from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
 import { requireStaff, requirePermission } from '../middleware/permissions.js';
@@ -339,6 +340,54 @@ router.patch(
   asyncHandler(paymentController.adminUpdatePlan),
 );
 router.delete('/plans/:id', requirePermission(PERMISSIONS.PLANS_MANAGE), asyncHandler(paymentController.adminDeactivatePlan));
+
+/* Testimonials */
+router.get('/testimonials', requirePermission(PERMISSIONS.TESTIMONIALS_VIEW), asyncHandler(testimonialController.adminListTestimonials));
+router.post(
+  '/testimonials',
+  requirePermission(PERMISSIONS.TESTIMONIALS_MANAGE),
+  validate({
+    body: z.object({
+      name: z.string().trim().min(2).max(120),
+      nameRw: z.string().trim().max(120).optional(),
+      role: z.string().trim().max(80).optional(),
+      roleRw: z.string().trim().max(80).optional(),
+      quote: z.string().trim().min(5).max(1000),
+      quoteRw: z.string().trim().max(1000).optional(),
+      rating: z.coerce.number().int().min(1).max(5).optional(),
+      avatar: z.string().trim().max(500).optional(),
+      order: z.coerce.number().int().optional(),
+      isActive: z.boolean().optional(),
+    }),
+  }),
+  asyncHandler(testimonialController.createTestimonial),
+);
+router.patch(
+  '/testimonials/:id',
+  requirePermission(PERMISSIONS.TESTIMONIALS_MANAGE),
+  validate({
+    body: z.object({
+      name: z.string().trim().min(2).max(120).optional(),
+      nameRw: z.string().trim().max(120).optional(),
+      role: z.string().trim().max(80).optional(),
+      roleRw: z.string().trim().max(80).optional(),
+      quote: z.string().trim().min(5).max(1000).optional(),
+      quoteRw: z.string().trim().max(1000).optional(),
+      rating: z.coerce.number().int().min(1).max(5).optional(),
+      avatar: z.string().trim().max(500).optional(),
+      order: z.coerce.number().int().optional(),
+      isActive: z.boolean().optional(),
+    }),
+  }),
+  asyncHandler(testimonialController.updateTestimonial),
+);
+router.delete('/testimonials/:id', requirePermission(PERMISSIONS.TESTIMONIALS_MANAGE), asyncHandler(testimonialController.deleteTestimonial));
+router.post(
+  '/testimonials/reorder',
+  requirePermission(PERMISSIONS.TESTIMONIALS_MANAGE),
+  validate({ body: z.object({ order: z.array(z.object({ id: z.string(), order: z.coerce.number().int() })) }) }),
+  asyncHandler(testimonialController.reorderTestimonials),
+);
 
 /* Payment settings */
 router.patch(

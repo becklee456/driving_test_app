@@ -29,6 +29,8 @@ export const PERMISSIONS = {
   AUDIT_VIEW: 'audit.view',
   BILLING_MANAGE: 'billing:manage',
   PLANS_MANAGE: 'plans:manage',
+  TESTIMONIALS_VIEW: 'testimonials.view',
+  TESTIMONIALS_MANAGE: 'testimonials.manage',
 };
 
 export const PAYMENT_STATUS = ['PENDING_REVIEW', 'UNDER_REVIEW', 'APPROVED', 'DENIED', 'EXPIRED'];
