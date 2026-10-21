@@ -42,7 +42,7 @@ import AdminPlans from '../pages/admin/AdminPlans.jsx';
 import AdminImports from '../pages/admin/AdminImports.jsx';
 import AdminAnalytics from '../pages/admin/AdminAnalytics.jsx';
 import AdminAudit from '../pages/admin/AdminAudit.jsx';
-import AdminSettings from '../pages/admin/AdminSettings.jsx';
+import AdminTestimonials from '../pages/admin/AdminTestimonials.jsx';
 
 export default function AppRoutes() {
   return (
@@ -102,8 +102,9 @@ export default function AppRoutes() {
           <Route path="users" element={<AdminUsers />} />
           <Route path="reports" element={<AdminReports />} />
           <Route path="payments" element={<AdminPayments />} />
-          <Route path="plans" element={<AdminPlans />} />
-          <Route path="imports" element={<AdminImports />} />
+            <Route path="plans" element={<AdminPlans />} />
+            <Route path="testimonials" element={<AdminTestimonials />} />
+            <Route path="imports" element={<AdminImports />} />
           <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="audit" element={<AdminAudit />} />
           <Route path="settings" element={<AdminSettings />} />
