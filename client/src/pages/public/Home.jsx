@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useCategories } from '../../hooks/useCategories.js';
+import { useTestimonials } from '../../hooks/useTestimonials.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { Card, Skeleton, Badge } from '../../components/ui/primitives.jsx';
 import { Icon } from '../../components/icons.jsx';
@@ -27,9 +27,10 @@ const TESTIMONIALS = [
 ];
 
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isAuthenticated } = useAuth();
   const { data: categories, isLoading } = useCategories();
+  const { data: testimonials } = useTestimonials();
 
   const totalQuestions = (categories || []).reduce((sum, c) => sum + (c.questionCount || 0), 0);
   const stats = [
@@ -156,25 +157,31 @@ export default function Home() {
           <p className="mt-1 text-sm text-slate-500">{t('home.testimonials_subtitle')}</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {TESTIMONIALS.map((item) => (
-            <Card key={item.name} className="relative flex flex-col gap-4 p-5">
-              <div className="flex items-center gap-1 text-amber-500">
-                {Array.from({ length: item.rating }).map((_, i) => (
-                  <Icon key={i} name="star" className="h-4 w-4" />
-                ))}
-              </div>
-              <p className="text-sm leading-relaxed text-slate-700">"{item.quote}"</p>
-              <div className="mt-auto flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-50 text-sm font-semibold text-brand-700">
-                  {item.name.slice(0, 2).toUpperCase()}
+          {(testimonials && testimonials.length ? testimonials : TESTIMONIALS).map((item) => {
+            const isRw = i18n.language?.startsWith('rw');
+            const name = (isRw && item.nameRw) || item.name;
+            const role = (isRw && item.roleRw) || item.role;
+            const quote = (isRw && item.quoteRw) || item.quote;
+            return (
+              <Card key={item._id || item.name} className="relative flex flex-col gap-4 p-5">
+                <div className="flex items-center gap-1 text-amber-500">
+                  {Array.from({ length: item.rating || 5 }).map((_, i) => (
+                    <Icon key={i} name="star" className="h-4 w-4" />
+                  ))}
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">{item.name}</p>
-                  <p className="text-xs text-slate-500">{item.role}</p>
+                <p className="text-sm leading-relaxed text-slate-700">"{quote}"</p>
+                <div className="mt-auto flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-50 text-sm font-semibold text-brand-700">
+                    {(name || '').slice(0, 2).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">{name}</p>
+                    {role ? <p className="text-xs text-slate-500">{role}</p> : null}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
       </section>
 

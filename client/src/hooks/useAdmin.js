@@ -191,8 +191,40 @@ export function useAuditLog(params = {}) {
   });
 }
 
-/* Imports */
-export function useImportPreview() {
+/* Testimonials */
+export function useAdminTestimonials() {
+  return useQuery({
+    queryKey: ['admin', 'testimonials'],
+    queryFn: () => request({ url: '/admin/testimonials' }),
+    select: (d) => d.testimonials || [],
+  });
+}
+
+export function useTestimonialMutations() {
+  const qc = useQueryClient();
+  const invalidate = () => {
+    qc.invalidateQueries({ queryKey: ['admin', 'testimonials'] });
+    qc.invalidateQueries({ queryKey: ['testimonials'] });
+  };
+  return {
+    create: useMutation({
+      mutationFn: (payload) => request({ method: 'post', url: '/admin/testimonials', data: payload }),
+      onSuccess: invalidate,
+    }),
+    update: useMutation({
+      mutationFn: ({ id, ...payload }) => request({ method: 'patch', url: `/admin/testimonials/${id}`, data: payload }),
+      onSuccess: invalidate,
+    }),
+    remove: useMutation({
+      mutationFn: (id) => request({ method: 'delete', url: `/admin/testimonials/${id}` }),
+      onSuccess: invalidate,
+    }),
+    reorder: useMutation({
+      mutationFn: (order) => request({ method: 'post', url: '/admin/testimonials/reorder', data: { order } }),
+      onSuccess: invalidate,
+    }),
+  };
+}
   return useMutation({
     mutationFn: (payload) => request({ method: 'post', url: '/admin/imports/preview', data: payload }),
   });
