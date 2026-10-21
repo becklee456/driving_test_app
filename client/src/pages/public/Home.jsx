@@ -20,6 +20,12 @@ const TONES = {
   rose: { chip: 'bg-rose-50 text-rose-600', accent: 'bg-rose-500' },
 };
 
+const TESTIMONIALS = [
+  { name: 'Uwase Claudine', role: 'Abanyeshuri', quote: 'Nabashije gutsinda ikizamini cyanjye ku nshuro ya mbere. Ibibazo byose byari bisa n\'ibyo nakoze hano.', rating: 5 },
+  { name: 'Niyonzima Eric', role: 'Abanyeshuri', quote: 'Imyitozo iri hano yaranyigishije cyane kandi yoroheje. Ndabashimiye.', rating: 5 },
+  { name: 'Mutesi Aline', role: 'Abanyeshuri', quote: 'Byarankomeje kandi nabonye aho nkeneye kwiyongera. Nabaye uwatsinze.', rating: 5 },
+];
+
 export default function Home() {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
@@ -140,6 +146,35 @@ export default function Home() {
                   </Link>
                 );
               })}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section>
+        <div className="mb-5 text-center">
+          <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">{t('home.testimonials_title')}</h2>
+          <p className="mt-1 text-sm text-slate-500">{t('home.testimonials_subtitle')}</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {TESTIMONIALS.map((item) => (
+            <Card key={item.name} className="relative flex flex-col gap-4 p-5">
+              <div className="flex items-center gap-1 text-amber-500">
+                {Array.from({ length: item.rating }).map((_, i) => (
+                  <Icon key={i} name="star" className="h-4 w-4" />
+                ))}
+              </div>
+              <p className="text-sm leading-relaxed text-slate-700">"{item.quote}"</p>
+              <div className="mt-auto flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-50 text-sm font-semibold text-brand-700">
+                  {item.name.slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">{item.name}</p>
+                  <p className="text-xs text-slate-500">{item.role}</p>
+                </div>
+              </div>
+            </Card>
+          ))}
         </div>
       </section>
 

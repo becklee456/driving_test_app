@@ -17,7 +17,9 @@
     "stat_success_sub": "Byakozwe n'abanyamuryango",
     "cta_title": " Ese witeguye gukora ikizami?",
     "cta_body": "jya mubihumbi by'Abanyarwanda bakoresha imyitozo iboneye kandi yukuri.",
-    "cta_button": "Fungura konti y'ubuntu"
+    "cta_button": "Fungura konti y'ubuntu",
+    "testimonials_title": "Ibyo abanyeshuri bavuga",
+    "testimonials_subtitle": "Ibihamya by'abanyeshuri batsinze ikizamini cyabo"
   },
   "nav": {
     "home": "Ahabanza",
@@ -385,7 +387,7 @@
     "payments": "Ubwishyu",
     "plans": "Plani",
     "payments_subtitle": "Genzura wemeze ubwishyu bwa Mobile Money bugenzurwa na mtu.",
-    "plans_subtitle": "Cunga plani za subscription zerekanwa ku rupapuro rw'ibiciro.",
+    "plans_subtitle": "Cunga amafatabuguzi ahari ku rupapuro rw'ibiciro.",
     "review": "Genzura",
     "deny": "Kwanga",
     "learner": "Umwigisha",
