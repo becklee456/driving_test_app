@@ -43,6 +43,7 @@ import AdminImports from '../pages/admin/AdminImports.jsx';
 import AdminAnalytics from '../pages/admin/AdminAnalytics.jsx';
 import AdminAudit from '../pages/admin/AdminAudit.jsx';
 import AdminTestimonials from '../pages/admin/AdminTestimonials.jsx';
+import AdminSettings from '../pages/admin/AdminSettings.jsx';
 
 export default function AppRoutes() {
   return (
