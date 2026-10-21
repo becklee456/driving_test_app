@@ -44,7 +44,7 @@
   },
   "maintenance": {
     "title": "Uburyo bwo kubungabunga",
-    "message": "Uru rubuga ruri mu kubungabunga. Ibikorwa bimwe ntibishoboka by’agateganyo. Ongera ugerageze nyuma gato."
+    "message": "Uru rubuga ruri mu kubungabunga. Ibikorwa bimwe ntibiri gukora by’agateganyo. Ongera ugerageze nyuma gato."
   },
   "common": {
     "loading": "Biri gutunganywa…",
@@ -140,7 +140,7 @@
     "resend": "Ongera wohereze kode",
     "two_factor": "Kwemeza kabiri",
     "two_factor_hint": "Injiza kode y'imibare 6 yo muri porogaramu yawe.",
-    "recovery_code": "Koresha kode yo kwikiza",
+    "recovery_code": "Koresha kode yo kugarura konti",
     "login_success": "Winjiye.",
     "register_success": "Konti yafunguwe. Reba imeyili yawe uyemeze.",
     "logged_out": "Wasohotse.",
@@ -151,7 +151,7 @@
     "forgot_subtitle": "Tuzakuohereza kode yo kurihindura.",
     "send_code": "Ohereza kode",
     "code_sent": "Niba konti ibaho, kode yoherejwe.",
-    "remember": "Unibuke"
+    "remember": "Unyibuke"
   },
   "dashboard": {
     "welcome": "Muraho, {{name}}",
@@ -161,9 +161,9 @@
     "streak": "Iminsi ikurikiranye",
     "level": "Urwego",
     "xp": "XP",
-    "coverage": "Ibyakorewe",
+    "coverage": "Ibyakozwe",
     "mastered": "Byagezweho",
-    "needs_work": "Bikeneye imyitozo",
+    "needs_work": "Ibikeneye imyitozo",
     "accuracy": "Ukuri",
     "tests_completed": "Ibizamini byarangiye",
     "best_score": "Amanota meza",
@@ -171,7 +171,7 @@
     "resume_quiz": "Komeza ikizamini",
     "start_practice": "Tangira imyitozo",
     "start_mock": "Tangira ikizamini cy'igerageza",
-    "weak_areas": "Bikeneye imyitozo myinshi",
+    "weak_areas": "Ibikeneye imyitozo myinshi",
     "strong_areas": "Aho uri mwiza",
     "recent_quizzes": "Ibizamini biheruka",
     "no_quizzes": "Ntabwo urakora ikizamini.",
@@ -208,7 +208,7 @@
   },
   "result": {
     "title": "Ibyavuye mu kizamini",
-    "passed": "Twishimiye, watsinze!",
+    "passed": "Birashimishije, watsinze!",
     "failed": "Komeza kwitoza, uri hafi.",
     "score": "Amanota yawe",
     "correct_answers": "{{correct}} kuri {{total}} by'ukuri",
@@ -217,15 +217,15 @@
     "by_category": "Ku byiciro",
     "back_to_dashboard": "Subira ku mbonerahamwe",
     "retake": "Ongera ugerageze",
-    "passing_score": "Amanota anyurwa: {{score}}%"
+    "passing_score": "Amanota make ashoboka: {{score}}%"
   },
   "categories": {
     "title": "Ibyiciro",
-    "subtitle": "Toza ukurikije insanganyamatsiko.",
+    "subtitle": "Itoze ukurikije insanganyamatsiko.",
     "questions_count": "Ibibazo {{count}}",
-    "coverage": "Ibyakorewe",
+    "coverage": "Ibyakozwe",
     "accuracy": "Ukuri",
-    "start": "Toza",
+    "start": "Tangira",
     "empty": "Nta byiciro bihari."
   },
   "progress": {
@@ -236,7 +236,7 @@
     "weak": "Intege nke",
     "strong": "Aho uri mwiza",
     "not_started": "Ntibiratangira",
-    "reset": "Subiza aho ngeze ku ntangiriro",
+    "reset": "Subiza byose ku ntangiriro",
     "reset_confirm": "Ibi bizasiba ibisubizo byawe, ibizamini n'ibibitswe byose. Komeza?"
   },
   "bookmarks": {
@@ -244,20 +244,20 @@
     "empty": "Nta kibazo urabika.",
     "remove": "Kuraho",
     "note": "Inyandiko",
-    "start_practice": "Toza ibibitswe"
+    "start_practice": "Tangira imyitozo"
   },
   "mistakes": {
     "title": "Amakosa yawe",
     "empty": "Nta makosa. Ni byiza!",
-    "attempts": "Ins kigeragezo {{count}}",
-    "last_answered": "Iheruka gusubizwa",
-    "practice": "Toza amakosa"
+    "attempts": "Inshuro wagerageje ni {{count}}",
+    "last_answered": "Ibiheruka gusubizwa",
+    "practice": "Itoze ukurikije amakosa wakoze"
   },
   "notifications": {
     "title": "Amamenyesha",
     "mark_all_read": "Menyesha ko byose byasomwe",
     "empty": "Nta mamenyesha.",
-    "unread": "Ntasomwa"
+    "unread": "Ntirirasomwa"
   },
   "profile": {
     "title": "Umwirondoro",
@@ -272,20 +272,20 @@
     "deactivate_confirm": "Konti yawe izahagarikwa. Komeza?",
     "revoke": "Kuraho",
     "revoke_all": "Sohoka muri ibikoresho byose",
-    "recovery_codes": "Bika izi kode zo kwikiza ahantu hatekanye."
+    "recovery_codes": "Bika izi kode zo kugarura konte cyangwa kwinjira indi nshuro ahantu hatekanye."
   },
   "settings": {
     "title": "Igenamiterere",
     "appearance": "Isura",
     "language": "Ururimi",
-    "reduce_motion": "Gabanya kugenda",
+    "reduce_motion": "Gabanya uburyo system igenda",
     "high_contrast": "Ibara ryinshi",
     "notifications": "Amamenyesha",
-    "study_reminders": "Ibibutsa kwiga",
+    "study_reminders": "kwibutsa kwiga",
     "new_content": "Ibintu bishya",
     "achievements": "Ibihembo",
     "test_results": "Ibyavuye mu kizamini",
-    "security_alerts": "Ibibutsa umutekano",
+    "security_alerts": "Amatangazo y'umutekano",
     "daily_goal": "Intego ya buri munsi",
     "saved": "Igenamiterere ryawe ryabitswe.",
     "announcement": "Itangazo",
@@ -294,7 +294,7 @@
     "exam_duration": "Igihe cy'ikizamini (iminota)",
     "exam_questions": "Umubare w'ibibazo by'ikizamini",
     "maintenance_mode": "Uburyo bwo kubungabunga",
-    "passing_score": "Amanota anyura (%)",
+    "passing_score": "Amanota akenewe byibuze ni (%)",
     "practice_default": "Umubare w'imyitozo usanzwe"
   },
   "admin": {
@@ -314,14 +314,14 @@
     "review_queue": "Urutonde rwo kugenzura",
     "import_preview": "Reba ibyinjizwa",
     "import_commit": "Injiza",
-    "passing_score": "Amanota anyurwa (%)",
+    "passing_score": "Amanota akenewe byibuze ni (%)",
     "exam_count": "Umubare w'ibibazo by'ikizamini",
-    "exam_duration": "Igihe cy'ikizamini (iminota)",
+    "exam_duration": "Igihe ikizamini kimara (iminota)",
     "practice_count": "Umubare w'imyitozo usanzwe",
     "maintenance": "Uburyo bwo kubungabunga",
     "allow_registration": "Emerera kwiyandikisha",
     "require_email_verification": "Saba kwemeza imeyili",
-    "require_2fa": "Saba 2FA ku bayobozi",
+    "require_2fa": "Saba Kwinjira Byizewe(2FA) ku bayobozi",
     "announcement": "Itangazo",
     "total_questions": "Ibibazo byose",
     "active_questions": "Ibibazo bikora",
@@ -390,60 +390,54 @@
     "review_note": "Igitekerezo cy'ubugenzuzi",
     "review_note_hint": "Igitekerezo kidafite uburenganzira bikubwa n'icyemezo.",
     "sent_to": "Yishyuriye kuri",
-    "new_plan": "Plani ishya",
-    "edit_plan": "Hindura plani",
+    "new_plan": "ifatabuguzi nshya",
+    "edit_plan": "Hindura ifatabuguzi",
     "plan_code": "Kode",
     "plan_code_hint": "Kode nto y'inyuguti, urugero: monthly_pro_30d",
-    "plan_name": "Izina rya plani",
+    "plan_name": "Izina rya ifatabuguzi",
     "price": "Igiciro",
     "original_price": "Igiciro mbere",
     "original_price_hint": "Igiciro cyo gusenyura (si cyo gatagatifu).",
     "order": "Gahunda",
-    "is_lifetime": "Plani y'ubuzima bwose",
+    "is_lifetime": "ifatabuguzi ry'ubuzima bwose",
     "is_lifetime_hint": "Ntiharangira. Igihe ntigire intwaro.",
     "duration_days": "Igihe (iminsi)",
     "is_popular": "Yerekwa nk'ikoreshwa cyane",
     "plan_features": "Ibyiza",
-    "plan_features_hint": "Ibimwe kuri buri mudoboi.",
+    "plan_features_hint": "Ibimwe kuri buri fatabuguzi.",
     "plan_invalid": "Andika izina, igiciro n'igihe bihuye.",
-    "plan_original_price_invalid": "Igiciro mbere kikomba kuba ringana cyangwa rinini ku igiciro gihagaze.",
-    "plan_badge": "Ibendera",
-    "plan_badge_hint": "Umugati w'ibendera (si ubwo gatagatifu): popular, best_value, forever — cyangwa ubwanditse bwawe.",
+    "plan_original_price_invalid": "Igiciro mbere kikomba kuba kingana cyangwa kinini ku giciro gisanzwe.",
+    "plan_badge": "Ikirango cy'ifatabuguzi",
+    "plan_badge_hint": "Ikirango cy'ifatabuguzi : popular, best_value, forever — .",
     "plan_interval": "Igihe cyo kwishyura",
     "interval_day": "Buri munsi",
     "interval_week": "Buri cyumweru",
     "interval_month": "Buri kwezi",
     "interval_year": "Buri mwaka",
     "entitlements": "Ubwemererwa",
-    "entitlements_hint": "Imiyanya yo gukoreshwa buri munsi, ihitswe mu gihe bwemejwe. Koresha -1 kugira ngo bige inda.",
+    "entitlements_hint": "Imyanya yo gukora buri munsi, yarangiye. Koresha irindi fatabuguzi kugira ngo wige ibindi cyangwa utegereze umunsi ukurikira.",
     "unlimited_hint": "-1 = ntirimo limiti",
     "ent_daily_questions": "Ibibazo buri munsi",
     "ent_daily_mocks": "Ibizamini buri munsi",
     "ent_daily_ai": "Ibibazo bya AI buri munsi",
     "ent_mistake_review": "Kureba amakosa",
     "ent_advanced_analytics": "Isesengura ryuzuye",
-    "ent_downloadable_reports": "Raporo zidownloadingwa",
+    "ent_downloadable_reports": "Raporo zi downloadingwa",
     "ent_ad_free": "Nta kwamamaza",
     "ent_priority_support": "Ubufasha bwihuse",
-    "plan_deactivated": "Plani yahagaritswe.",
-    "plan_shown": "Kugaragajwe abakora",
-    "plan_shown_hint": "Kuboneka ku rupapuro rw'ibiciro kandi ishora ku gura.",
-    "plan_hidden": "Bidakunze kuboneka",
-    "plan_hidden_hint": "Bidanjye ku rupapuro rw'ibiciro; kugura biranswe.",
-    "plan_enabled": "Plani igeze kugaragajwe abakora.",
-    "plan_disabled": "Plani irakurwemo ku bakorera.",
+    "plan_deactivated": "ifatabuguzi ryahagaritswe.",
     "deactivate": "Hagarika",
-    "no_plans": "Nta plani ahari.",
+    "no_plans": "Nta fatabuguzi rihari ubu.",
     "payment_settings": "Igenamiterere ry'ubwishyu",
     "pay_method": "Uburyo bwo kwishyura",
     "pay_recipient_phone": "Numero y'umubikira",
     "pay_recipient_name": "Izina ry'umubikira",
-    "pay_currency": "Ipara ry'ikiguzi",
-    "pay_window": "Igihe cy'ubugerererwa (ama-saa)",
-    "free_questions_allowed": "Ibibazo by'ubuntu birashoboka",
-    "free_attempts_allowed": "Igeragezo by'ubuntu birashoboka",
+    "pay_currency": "Ubwoko bw'ifaranga ry'ikiguzi",
+    "pay_window": "Igihe cyokugenzura (amasaha)",
+    "free_questions_allowed": "Ibibazo by'ubuntu biremewe",
+    "free_attempts_allowed": "Igeragezo by'ubuntu rirashoboka",
     "pay_instructions": "Amabwiriza yo kwishyura",
-    "pay_instructions_hint": "Iherekanwa abanyeshuri ku rupapuro rw'ibiciro n'ikigaro cyo kwishyura.",
+    "pay_instructions_hint": " ishyura ukoresheje Mobile Money hanyuma wohereze ubutumwa bwemeza ubwishyu.",
     "save_payment_settings": "Bika igenamiterere ry'ubwishyu"
   },
   "pricing": {
@@ -601,13 +595,13 @@
           ]
         },
         {
-          "title": "10. Guhindura aya mategeko namabwiriza",
+          "title": "9. Guhindura aya mategeko namabwiriza",
           "body": [
             "Tushobora kuvugurura aya mategeko namabwiriza. Itariki y'ivugururo irahinduka, kandi uko ukomeza gukoresha porogaramu uzajya umenya niba yahindutse."
           ]
         },
         {
-          "title": "11. Tumenyeshe ikibazo",
+          "title": "10. Tumenyeshe ikibazo",
           "body": [
             "Niba ufite ibibazo kuri aya mategeko namabwiriza cyangwa amakuru yawe, twandikire kuri newcreativecentury@gmail.com."
           ]
@@ -623,86 +617,91 @@
         {
           "title": "1. Serivisi",
           "body": [
-            "Porogaramu yatanga ibibazo by'igerageza ry'ibyamamaza, ibizamini bya kugerageza, no kubona aho ugeze, hamwe ni fatabuguzi zihawe. Ibyo byihariye n'imitaro (nk'imitaro ya bibazo ku munsi) biragaragajwe mu porogaramu kandi birashobora guhinduka."
+            "Porogaramu itanga ibibazo by'igerageza byikizamini, ibizamini byo kugerageza, no kubona aho ugeze, hamwe ni fatabuguzi ryawe. ibibazo bikoreshwa bishobora kugira iminduka gusa zizewe zigendana nigihe."
           ]
         },
         {
           "title": "2. Konti",
           "body": [
-            "Ukunda gutanga amakuru y'ukuri kandi waba umunsi 18 ryuzuye utagura plan. Aihe tewe, neze zose zikozwa n'iyi konti ni zawe; keba ijambo banga ryawe si ry'uwundi kandi ntugurane konti yawe n'uwundi."
+            "Ukeneye konti kugira ngo ukoreshe porogaramu. Ukeneye gutanga amakuru y'ukuri kandi yuzuye, kandi ugomba kuyavugurura igihe cyose bihindutse.",
+            "Ufite uburenganzira bwo gukoresha konti yawe gusa. Ntugomba gusangira ijambo banga ryawe cyangwa kwemerera abandi gukoresha konti yawe.",
+            "Niba utekereza ko konti yawe yinjiriwe n'umuntu utabifitiye uburenganzira, twandikire vuba kuri newcreativecentury@gmail.com"
+          ]
+          },
+        {
+          "title": "3. Ubwishyu n'ukenzurwa",
+          "body": [
+            "Ubwishyu ni butumwa: ohereza ubwishyu na Mobile Money ku nomero yerekanwe, wohereze ifoto y'ubwishyu. Abgenzura sisitemu bagenzura ubwishyu mu minsi y'igenzura.",
+            "Niba ubwishyu bwawe bwemejwe, ifatabuguzi ryawe rizatangira gukora. Niba ubwishyu bwawe butemejwe, tuzagusubiza amafaranga yawe."
           ]
         },
         {
-          "title": "3. Plan z'ubuziraherezo n'izihawe",
+          "title": "4. Ibikorwa ntibyemewe",
           "body": [
-            "Ubwuziraherezo bufite mitaro igaragajwe mu porogaramu. Plan zihawe zitanga uburenganzira (nk'ibizamini bya kugerageza ku munsi) ku gihe plan yerekewe mbere yo guhura.",
-            "Ibiciro ni RWF kandi bikwemerezwa ku igiciro cy'urubuga kerekewe kuri checkout. Plan \"ubuziraherezo\" niyo porogaramu ihari."
-          ]
-        },
-        {
-          "title": "4. Ubwishyu n'ukenzurwa",
-          "body": [
-            "Ubwishyu ni butumwa: ohereza Mobile Money ku nomero yerekewe, wikorese ifoto y'ubwishyu. Abakorera ubwishyu bagenzura iminsi y'igenzura; ibisabwa bigera ku gihe gishize.",
-            "Plan itangiriza ubwo ubwishyu bwemewe. Amakuru yawe yo kwishyura bikorwa (approval snapshot) ntibirahinduka nubwo igiciro cyahinduka."
-          ]
-        },
-        {
-          "title": "5. Amadenko (Refunds)",
-          "body": [
-            "Nk'uko amategeko y'u Rwanda asaba, plan ishyuwe n'ugukorwa (activated) ntirashobora kugarurwa. Niba ubwishyu bwemewe ariko plan ntibwayobwe cyangwa hari ikibazo, tuandikure kuri newcreativecentury@gmail.com dukaganjemo."
-          ]
-        },
-        {
-          "title": "6. Ibikorwa ntibyemewe",
-          "body": [
-            "Ntugira:",
+            "Ntugomba kugira:",
             [
-              "intwaro zikora, bots cyangwa uburyo bw'ikoranabuhanga kugira ngo wakure ibibazo cyangwa ukoreshe imwanya utari wawe;",
-              "guheza mu bizamini, guhindura ibisubizo cyangwa kubangamira abakora bakiri;",
-              "kugerageza kwinjira mu buryo budafungurijwe kuri porogaramu, amakuru cyangwa konti zayo;",
-              "kubika ibitumwa bitari ukuri bw'ubwishyu cyangwa kwiyemeza ubwishyu utatumije;",
-              "gukoporora, kugurana cyangwa kwagura ibibazo hanze y'iyigishijwe yawe."
+              "Gukoresha porogaramu mu buryo butemewe n'amategeko cyangwa butabangamira abandi.",
+              "Gukoresha porogaramu mu buryo bwo guhindura, gusenya, cyangwa kwangiza sisitemu.",
+              "Gukoresha porogaramu mu buryo bwo kwiba amakuru y'abandi cyangwa kuyakoresha mu buryo butemewe.",
+              "Gukoresha porogaramu mu buryo bwo gukwirakwiza virusi, malware, cyangwa ibindi byangiza sisitemu."
             ]
           ]
         },
         {
-          "title": "7. Amakuru y'ibyigisho",
+          "title": "5. Amakuru y'ibyigishwa",
           "body": [
-            "Ibibazo byacu n'ibizamini ni ibyigisho byateguwe k'ikizamini cy'amategeko y'itwara mu Rwanda. Si ikizamini ofitswe, kandi ntitugirana ubucwe n'ikigo cy'ibyirezi, kandi guyigerera ntibwubahisha ko uzatsinda ikizamini ofitswe."
+            "Ibibazo byacu n'ibizamini byateguwe hakoreshejwe ikizamini cy'amategeko y'itwara mu Rwanda."
           ]
         },
         {
-          "title": "8. Uburenganzira bwa porogaramu",
+          "title": "6. Uburenganzira bwa porogaramu",
           "body": [
-            "Porogaramu, imiterere yayo, amazina n'ibibazo byayo ni ibyacu cyangwa iby'abatuboniye. Ufite uburenganzira bw'ihana gusa ku buryo bwo kwiga. Ibyo utanzwe (nk'ibitonderwa ku bibazo) birashobora gukoreshwa kugira ngo turuteze imbere."
+            "Porogaramu, imiterere yayo, amazina n'ibibazo byayo ni ibyacu . uko witwara nibibazo uhura nabyo bizakoreshwa mukuvugurura iyi sisitemu."
           ]
         },
         {
-          "title": "9. Guhagarika no kwitsindwa",
+          "title": "7. Ibyo utagomba gukora",
           "body": [
-            "Tushobora guhagarika cyangwa gufasha konti zitakubwiye aya mategeko, zatanzwe amakuru atari ukuri, cyangwa zakoze serivisi. Ushobora gufasha konti yawe uko ari buri gihe mu mwirondoro wawe."
+            "Ntugomba:",
+            [
+              "Gukora kopi, guhindura, cyangwa gukwirakwiza porogaramu cyangwa ibibazo byayo.",
+              "Gukoresha porogaramu mu buryo bwo kwiba amakuru y'abandi cyangwa kuyakoresha mu buryo butemewe.",
+              "Gukoresha porogaramu mu buryo bwo gukwirakwiza virusi, malware, cyangwa ibindi byangiza sisitemu."
+            ]
           ]
         },
         {
-          "title": "10. Umutekano n'ibihombo",
+          "title": "8. Guhagarika konti",
           "body": [
-            "Porogaramu yatanga \"nk'uko iri\" nta mbwirizwa zitandukanye. Mu buryo amategeko bareka, nta kubangamira ibitagatanyijwe cyangwa bikurikirana, kandi igihombo cyacu gihagaranywa n'igishyu watanzwe mu mezi 12 ishize."
+            "Dushobora guhagarika konti yawe igihe cyose niba utemeye aya mategeko, cyangwa niba dukeka ko konti yawe ikoreshwa mu buryo butemewe."
           ]
         },
         {
-          "title": "11. Amategeko ashingiye",
+          "title": "9. Ibyo duteganya",
           "body": [
-            "Aya mategeko ashingiye ku mategeko y'u Rwanda, kandi ingengo y'amategeko y'igihugu ni yo ishinzwe ibihazo byose biba bidatanzwe."
+            "Porogaramu itangwa \"nk'uko iri\" nta mbwirizwa zitandukanye. Ntitwizeye ko porogaramu izakora neza cyangwa ko ibibazo byose bizaba byuzuye."
           ]
         },
         {
-          "title": "12. Guhindura no kutumaniriza",
+          "title": "10. Ibyo duteganya",
           "body": [
-            "Tushobora kuvugurura aya mategeko; itariki irahinduka kandi ukomeza gukoresha bumenya wemera iyavuguruwe. Ifite ibibazo? Tuandikure kuri newcreativecentury@gmail.com."
+            "Ntitwizeye ko porogaramu izakora neza cyangwa ko ibibazo byose bizaba byuzuye."
+          ]
+        },
+        {
+          "title": "11. Guhagarika no kwishyura",
+          "body": [
+            "Dushobora guhagarika porogaramu igihe cyose, kandi ntitwizeye ko izakomeza gukora. Niba porogaramu ihagaritswe, tuzagusubiza amafaranga yawe y'ifatabuguzi ry'igihe cyose ndetse niritararangira."
+          ]
+        },
+        {
+          "title": "12. Amategeko agenga",
+          "body": [
+            "Aya mategeko agenga ukoresha porogaramu."
           ]
         }
       ],
-      "contact": "Ifite ibibazo kuri aya mategeko? Cyohereza kuri newcreativecentury@gmail.com."
+      "contact": "Ufite ibibazo kuri aya mategeko? Cyohereza kuri newcreativecentury@gmail.com."
     }
   },
   "theme": {

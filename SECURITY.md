@@ -88,7 +88,7 @@ Production runs with Mongoose `autoIndex: false`. After any deploy that changes 
 ALLOW_PRODUCTION_SYNC_INDEXES=1 node server/src/scripts/sync-indexes.js
 ```
 
-The script only calls `syncIndexes()` per model (drops outdated index definitions, builds current ones); it never touches documents.
+The script compares each model's schema indexes against the ones in the database: it drops any index that shares a name with a desired index but has different options (e.g. an old non-unique `transactionReference_1` blocking the new partial-unique one), then calls `createIndexes()` (a no-op when already correct). It never touches documents, and re-running it is safe.
 
 ## Verification
 
@@ -103,6 +103,5 @@ npm run build
 ## Known trade-offs / open items
 
 - **Register returns “e-mail taken”** (enumeration) — deliberate UX trade-off; all other auth endpoints are generic.
-- **Support e-mail mismatch**: `en.json` lists `support@ikizamini.rw`, `rw.json` lists `newcreativecentury@gmail.com` — needs a product decision.
 - Argon2 password hashing was considered; bcrypt cost 12 retained for now.
 - MongoDB is Atlas M0 (no transactions) — consistency relies on atomic single-document updates and unique indexes instead of multi-document transactions.
