@@ -55,6 +55,7 @@ const PATHS = {
   'credit-card': 'M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM2 10h20M6 15h4',
   tag: 'M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01',
   crown: 'M3 18h18M4 17l-1.5-9L8 12l4-7 4 7 5.5-4L20 17z',
+  star: 'M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z',
 };
 
 export function Icon({ name, className = 'h-5 w-5', strokeWidth = 2, filled = false, ...props }) {
