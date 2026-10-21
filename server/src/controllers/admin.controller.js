@@ -54,7 +54,7 @@ export async function listAudit(req, res) {
   const filter = {};
   if (req.query.action) filter.action = req.query.action;
   if (req.query.actor) filter.actor = req.query.actor;
-  if (req.query.result) filter.result = req.query.result;
+  if (req.query.result && req.query.result !== 'all') filter.result = req.query.result;
 
   const [items, total] = await Promise.all([
     AdminActivity.find(filter)
@@ -96,6 +96,9 @@ export async function updateSettings(req, res) {
   ];
   for (const key of allowed) {
     if (req.body[key] !== undefined) settings[key] = req.body[key];
+  }
+  if (req.body.theme && typeof req.body.theme === 'object') {
+    settings.theme = { ...(settings.theme || {}), ...req.body.theme };
   }
   settings.updatedBy = req.user._id;
   await settings.save();

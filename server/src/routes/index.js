@@ -34,6 +34,10 @@ router.get(
       announcement: s.announcement,
       freeQuestionsAllowed: s.freeQuestionsAllowed,
       freePracticeAttemptsAllowed: s.freePracticeAttemptsAllowed,
+      theme: {
+        primaryColor: s.theme?.primaryColor || '#1b6ff5',
+        accentColor: s.theme?.accentColor || '#fad201',
+      },
       payment: {
         method: s.payment?.method || 'Manual Mobile Money',
         recipientPhone: s.payment?.recipientPhone || '0783632506',

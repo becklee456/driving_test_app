@@ -295,7 +295,13 @@
     "exam_questions": "Exam question count",
     "maintenance_mode": "Maintenance mode",
     "passing_score": "Passing score (%)",
-    "practice_default": "Default practice count"
+    "practice_default": "Default practice count",
+    "appearance_hint": "Changes the main brand colour used across the whole application.",
+    "preset_colors": "Preset colours",
+    "custom_color": "Custom colour",
+    "hex_code": "HEX code",
+    "preview": "Preview",
+    "invalid_color": "Please enter a valid HEX colour, e.g. #1b6ff5"
   },
   "admin": {
     "dashboard": "Admin dashboard",

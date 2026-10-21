@@ -295,7 +295,13 @@
     "exam_questions": "Umubare w'ibibazo by'ikizamini",
     "maintenance_mode": "Uburyo bwo kubungabunga",
     "passing_score": "Amanota akenewe byibuze ni (%)",
-    "practice_default": "Umubare w'imyitozo usanzwe"
+    "practice_default": "Umubare w'imyitozo usanzwe",
+    "appearance_hint": "Ihindura ibara ry'ikigo nyamukuru gikoreshwa muri porogaramu yose.",
+    "preset_colors": "Ibara ryateganyijwe",
+    "custom_color": "Ibara ry'umw muheke",
+    "hex_code": "Umubare HEX",
+    "preview": "Igaragaza",
+    "invalid_color": "Injiza ibara HEX ry'ukuri, urugero nk'urugero #1b6ff5"
   },
   "admin": {
     "dashboard": "Imbonerahamwe y'ubuyobozi",

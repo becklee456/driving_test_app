@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { request } from '../lib/api.js';
 import { setLanguage } from '../i18n/index.js';
+import { applyBrandPalette, clearBrandPalette, normalizeHex } from '../lib/branding.js';
 
 const SettingsContext = createContext(null);
 
@@ -18,6 +19,7 @@ const DEFAULTS = {
   requireEmailVerification: false,
   maintenanceMode: false,
   announcement: '',
+  theme: { primaryColor: '#1b6ff5', accentColor: '#fad201' },
 };
 
 function readTheme() {
@@ -88,6 +90,12 @@ export function SettingsProvider({ children }) {
     mq?.addEventListener?.('change', handler);
     return () => mq?.removeEventListener?.('change', handler);
   }, [theme, reduceMotion]);
+
+  useEffect(() => {
+    const primary = normalizeHex(config?.theme?.primaryColor);
+    if (primary) applyBrandPalette(primary);
+    else clearBrandPalette();
+  }, [config?.theme?.primaryColor]);
 
   const setTheme = useCallback((next) => {
     setThemeState(next);

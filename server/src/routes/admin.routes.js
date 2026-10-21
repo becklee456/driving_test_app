@@ -53,6 +53,9 @@ router.get('/analytics/questions', requirePermission(PERMISSIONS.ANALYTICS_VIEW)
 router.get('/analytics/leaderboard', requirePermission(PERMISSIONS.ANALYTICS_VIEW), asyncHandler(adminController.leaderboard));
 router.get('/analytics/recent-activity', requirePermission(PERMISSIONS.ANALYTICS_VIEW), asyncHandler(adminController.recentActivity));
 
+/* Audit trail */
+router.get('/audit', requirePermission(PERMISSIONS.AUDIT_VIEW), asyncHandler(adminController.listAudit));
+
 /* Questions */
 router.get('/questions', requirePermission(PERMISSIONS.QUESTIONS_VIEW), asyncHandler(questionController.adminList));
 router.get('/questions/stats', requirePermission(PERMISSIONS.QUESTIONS_VIEW), asyncHandler(questionController.questionStats));
@@ -241,6 +244,12 @@ router.patch(
       announcement: z.string().max(1000).optional(),
       xpPerCorrectAnswer: z.coerce.number().int().min(0).max(100).optional(),
       xpPerTest: z.coerce.number().int().min(0).max(500).optional(),
+      theme: z
+        .object({
+          primaryColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/, 'HEX color required').optional(),
+          accentColor: z.string().trim().regex(/^#[0-9a-fA-F]{6}$/, 'HEX color required').optional(),
+        })
+        .optional(),
     }),
   }),
   asyncHandler(adminController.updateSettings),

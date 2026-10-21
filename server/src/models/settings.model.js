@@ -21,6 +21,12 @@ const settingsSchema = new Schema(
     xpPerCorrectAnswer: { type: Number, default: 5 },
     xpPerTest: { type: Number, default: 25 },
 
+    // --- Branding / appearance ---
+    theme: {
+      primaryColor: { type: String, default: '#1b6ff5', trim: true, maxlength: 7 },
+      accentColor: { type: String, default: '#fad201', trim: true, maxlength: 7 },
+    },
+
     // --- Monetisation / manual Mobile Money settings ---
     freeQuestionsAllowed: { type: Number, default: 40, min: 0 },
     freePracticeAttemptsAllowed: { type: Number, default: 1, min: 0 },

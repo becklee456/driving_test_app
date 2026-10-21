@@ -4,6 +4,7 @@ import { useAdminSettings, useUpdateSettings } from '../../hooks/useAdmin.js';
 import { useUpdatePaymentSettings } from '../../hooks/useBilling.js';
 import { useSettings } from '../../context/SettingsContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
+import { applyBrandPalette } from '../../lib/branding.js';
 import { Card, Skeleton, Alert, Divider, Toggle } from '../../components/ui/primitives.jsx';
 import { Button, Input, Textarea, Select } from '../../components/ui/form.jsx';
 import { PageHeader } from '../../components/ui/PageHeader.jsx';
@@ -16,6 +17,19 @@ const BOOLEAN_KEYS = [
   ['maintenanceMode', 'settings.maintenance_mode'],
 ];
 
+const COLOR_PRESETS = [
+  { key: 'blue', color: '#1b6ff5' },
+  { key: 'indigo', color: '#4f46e5' },
+  { key: 'violet', color: '#7c3aed' },
+  { key: 'rose', color: '#e11d48' },
+  { key: 'emerald', color: '#059669' },
+  { key: 'teal', color: '#0d9488' },
+  { key: 'amber', color: '#d97706' },
+  { key: 'slate', color: '#334155' },
+];
+
+const HEX_RE = /^#[0-9a-fA-F]{6}$/;
+
 export default function AdminSettings() {
   const { t } = useTranslation();
   const toast = useToast();
@@ -25,10 +39,12 @@ export default function AdminSettings() {
   const updatePayment = useUpdatePaymentSettings();
   const [form, setForm] = useState(null);
   const [payForm, setPayForm] = useState(null);
+  const [primaryColor, setPrimaryColor] = useState('#1b6ff5');
 
   useEffect(() => {
     if (settings) {
       setForm(settings);
+      setPrimaryColor(settings.theme?.primaryColor || '#1b6ff5');
       setPayForm({
         freeQuestionsAllowed: settings.freeQuestionsAllowed ?? 40,
         freePracticeAttemptsAllowed: settings.freePracticeAttemptsAllowed ?? 10,
@@ -42,6 +58,12 @@ export default function AdminSettings() {
     }
   }, [settings]);
 
+  useEffect(() => {
+    if (!HEX_RE.test(primaryColor)) return undefined;
+    applyBrandPalette(primaryColor);
+    return () => applyBrandPalette(settings?.theme?.primaryColor || '#1b6ff5');
+  }, [primaryColor, settings?.theme?.primaryColor]);
+
   if (isLoading || !form || !payForm) return <Skeleton className="h-96" />;
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -49,6 +71,10 @@ export default function AdminSettings() {
   const setPay = (key) => (e) => setPayForm((f) => ({ ...f, [key]: e.target.value }));
 
   const save = async () => {
+    if (!HEX_RE.test(primaryColor)) {
+      toast.error(t('settings.invalid_color'));
+      return;
+    }
     try {
       await update.mutateAsync({
         passingScorePercent: Number(form.passingScorePercent),
@@ -60,8 +86,10 @@ export default function AdminSettings() {
         defaultLanguage: form.defaultLanguage,
         enabledLanguages: form.enabledLanguages,
         announcement: form.announcement,
+        theme: { primaryColor },
         ...Object.fromEntries(BOOLEAN_KEYS.map(([k]) => [k, Boolean(form[k])])),
       });
+      await refresh();
       toast.success(t('settings.saved'));
     } catch (err) {
       toast.error(err.message || t('errors.generic'));
@@ -194,6 +222,63 @@ export default function AdminSettings() {
         <Button onClick={savePayment} loading={updatePayment.isPending} size="sm">
           {t('admin.save_payment_settings')}
         </Button>
+      </Card>
+
+      <Card className="space-y-4 p-5">
+        <h3 className="text-sm font-semibold text-slate-900">{t('settings.appearance')}</h3>
+        <p className="text-xs text-slate-500">{t('settings.appearance_hint')}</p>
+        <div>
+          <p className="mb-2 text-sm font-medium text-slate-700">{t('settings.preset_colors')}</p>
+          <div className="flex flex-wrap gap-2">
+            {COLOR_PRESETS.map((preset) => (
+              <button
+                key={preset.key}
+                type="button"
+                title={preset.key}
+                onClick={() => setPrimaryColor(preset.color)}
+                className={`h-9 w-9 rounded-full border-2 transition ${
+                  primaryColor.toLowerCase() === preset.color ? 'border-slate-900' : 'border-transparent'
+                }`}
+                style={{ backgroundColor: preset.color }}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="flex items-end gap-3">
+            <div>
+              <p className="label">{t('settings.custom_color')}</p>
+              <input
+                type="color"
+                value={HEX_RE.test(primaryColor) ? primaryColor : '#1b6ff5'}
+                onChange={(e) => setPrimaryColor(e.target.value)}
+                className="h-10 w-16 cursor-pointer rounded-lg border border-slate-300 bg-white p-1"
+              />
+            </div>
+            <Input
+              label={t('settings.hex_code')}
+              value={primaryColor}
+              onChange={(e) => setPrimaryColor(e.target.value)}
+              maxLength={7}
+              className="font-mono uppercase"
+            />
+          </div>
+          <div className="rounded-xl border border-slate-200 p-3">
+            <p className="mb-2 text-xs font-medium text-slate-500">{t('settings.preview')}</p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="rounded-xl px-4 py-2 text-sm font-semibold text-white"
+                style={{ backgroundColor: HEX_RE.test(primaryColor) ? primaryColor : '#1b6ff5' }}
+              >
+                {t('common.save')}
+              </button>
+              <span className="link text-sm" style={{ color: HEX_RE.test(primaryColor) ? primaryColor : '#1b6ff5' }}>
+                {t('common.view')}
+              </span>
+            </div>
+          </div>
+        </div>
       </Card>
 
       <div className="sticky bottom-20 md:bottom-4">

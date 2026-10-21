@@ -4,6 +4,19 @@
 
 :root {
   color-scheme: light;
+
+  /* Brand palette (space-separated RGB channels, overridable at runtime) */
+  --brand-50: 238 247 255;
+  --brand-100: 217 237 255;
+  --brand-200: 188 224 255;
+  --brand-300: 142 205 255;
+  --brand-400: 89 176 255;
+  --brand-500: 51 143 255;
+  --brand-600: 27 111 245;
+  --brand-700: 22 87 225;
+  --brand-800: 24 71 182;
+  --brand-900: 26 64 143;
+  --brand-950: 20 40 87;
 }
 
 html {
@@ -21,7 +34,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #1b6ff5;
+  outline: 2px solid rgb(var(--brand-600));
   outline-offset: 2px;
 }
 
@@ -150,22 +163,22 @@ body {
 
 /* Brand tints */
 .dark .bg-brand-50 {
-  background-color: rgb(51 143 255 / 0.15);
+  background-color: rgb(var(--brand-500) / 0.15);
 }
 .dark .bg-brand-50\/40 {
-  background-color: rgb(51 143 255 / 0.1);
+  background-color: rgb(var(--brand-500) / 0.1);
 }
 .dark .bg-brand-100 {
-  background-color: rgb(51 143 255 / 0.2);
+  background-color: rgb(var(--brand-500) / 0.2);
 }
 .dark .text-brand-600,
 .dark .text-brand-700,
 .dark .text-brand-800,
 .dark .text-brand-900 {
-  color: #8ecdff;
+  color: rgb(var(--brand-300));
 }
 .dark .border-brand-200 {
-  border-color: rgb(51 143 255 / 0.4);
+  border-color: rgb(var(--brand-500) / 0.4);
 }
 
 /* Amber */
@@ -248,14 +261,14 @@ body {
 }
 .dark .hover\:bg-brand-50:hover,
 .dark .hover\:bg-brand-50\/40:hover {
-  background-color: rgb(51 143 255 / 0.15);
+  background-color: rgb(var(--brand-500) / 0.15);
 }
 .dark .hover\:text-brand-700:hover {
-  color: #bce0ff;
+  color: rgb(var(--brand-200));
 }
 .dark .hover\:border-brand-300:hover,
 .dark .hover\:border-brand-400:hover {
-  border-color: rgb(51 143 255 / 0.6);
+  border-color: rgb(var(--brand-500) / 0.6);
 }
 .dark .hover\:bg-rose-50:hover {
   background-color: rgb(244 63 94 / 0.2);
@@ -307,10 +320,10 @@ body {
   background-color: #1e293b;
 }
 .dark .link {
-  color: #8ecdff;
+  color: rgb(var(--brand-300));
 }
 .dark .link:hover {
-  color: #bce0ff;
+  color: rgb(var(--brand-200));
 }
 
 /* Elements that must stay light regardless of theme */
@@ -319,9 +332,9 @@ body {
 }
 .dark .hero-cta {
   background-color: #ffffff;
-  color: #1657e1;
+  color: rgb(var(--brand-700));
 }
 .dark .hero-cta:hover {
   background-color: #eef7ff;
-  color: #1657e1;
+  color: rgb(var(--brand-700));
 }
